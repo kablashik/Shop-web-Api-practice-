@@ -45,12 +45,14 @@ public class TableController : Controller
         return RedirectToAction("Index");
     }
 
-    public IActionResult UpdateProduct(int productId, string newName, string newDescription, double newPrice, int newAmount)
+    public IActionResult UpdateProduct(int productId, string newName,
+        string newDescription, double newPrice, int newAmount)
     {
-        _products[productId].Name = newName;
-        _products[productId].Description = newDescription;
-        _products[productId].Price = newPrice;
-        _products[productId].Amount = newAmount;
+        var index = _products.FindIndex(p => p.Id == productId);
+        _products[index].Name = newName;
+        _products[index].Description = newDescription;
+        _products[index].Price = newPrice;
+        _products[index].Amount = newAmount;
         
         return RedirectToAction("Index");
     }
