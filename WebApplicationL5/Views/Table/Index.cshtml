@@ -1,0 +1,51 @@
+﻿@model List<Product>;
+@{
+    ViewData["Title"] = "Table Page";
+    Layout = "~/Views/Table/_Layout.cshtml";
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Store</h1>
+
+
+    <div class="myTable">
+        <table>
+
+            <tr>
+                <th>
+                    ID
+                    <a class="btn btn-primary, col-lg-3" asp-area="" asp-controller="Form" asp-action="Index">
+                        <span style="color: green; font-size: 24px; font-weight: bold;">+</span>
+                    </a>
+                </th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Цена шт.</th>
+                <th>Количество</th>
+                <th>
+                    Действие
+                </th>
+            </tr>
+
+            @for (var i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td style="font-style: italic">@Model[i].Id</td>
+                    <td>@Model[i].Name</td>
+                    <td>@Model[i].Description</td>
+                    <td>@Model[i].Price р.</td>
+                    <td>@Model[i].Amount</td>
+                    @* <td>✔️ ✎ ❌</td> *@
+                    <td>
+                        <a class="btn btn-primary, col-lg-3" asp-area="" asp-controller="Table" asp-action="UpdateProduct"
+                           asp-route-arg="@Model[i].Id"
+                           asp-route-arg1="@Model[i].Id">✎</a>
+                        <a class="btn btn-primary, col-lg-3" asp-area="" asp-controller="Table" asp-action="DeleteProduct"
+                           asp-route-productId="@Model[i].Id">❌</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Form</h1>
+</div>
+
+<form action = "@Url.Action("AddProduct", "Table", 
+                    Url.Action("UpdateProduct", "Table"))" method="Post" >
+    Название: <br/>
+    <input type = "text" name = "name" value=""/> <br/>
+    Описание: <br/>
+    <input type = "text" name = "description" value=""/> <br/>
+    Цена: <br/>
+    <input type = "number" name = "price" value=""/> <br/>
+    Количество: <br/>
+    <input type = "number" name = "amount" value=""/> <br/>
+    <input type="submit" name="Отправить"/> <br/>
+</form>
+
+
+@section Footer{
+    Кастомный копирайтинг
+}
