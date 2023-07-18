@@ -6,7 +6,7 @@ namespace WebApplicationL5.Controllers;
 public class TableController : Controller
 {
     private static List<Product> _products = new();
-    private static int _id = 0;
+    private static int _id;
 
     private readonly string[] _items =
     {
@@ -23,12 +23,19 @@ public class TableController : Controller
     public IActionResult Index()
     {
         if (_id == 0) CreateFirstFiveProducts();
-        
+
         return View(_products);
     }
 
-    [HttpPost("add-product")]
-    public IActionResult AddProduct(string name, string description, double price, int amount)
+    [HttpGet]
+    public IActionResult AddProduct()
+    {
+        return View("IndexForm");
+    }
+
+    [HttpPost]
+    public IActionResult AddProduct([FromForm] string name, [FromForm] string description,
+        [FromForm] double price, [FromForm] int amount)
     {
         var product = new Product
         {
@@ -42,19 +49,27 @@ public class TableController : Controller
         _id++;
         _products.Add(product);
 
-        return RedirectToAction("Index");
+        return Redirect("Index");
     }
 
-    public IActionResult UpdateProduct(int productId, string newName,
-        string newDescription, double newPrice, int newAmount)
+    [HttpGet]
+    public IActionResult UpdateProduct()
+    {
+        return View("IndexForm");
+    }
+
+    [HttpPost]
+    public IActionResult UpdateProduct([FromRoute] int productId, [FromForm] string? name,
+        [FromForm] string? description, [FromForm] double price, [FromForm] int amount)
     {
         var index = _products.FindIndex(p => p.Id == productId);
-        _products[index].Name = newName;
-        _products[index].Description = newDescription;
-        _products[index].Price = newPrice;
-        _products[index].Amount = newAmount;
         
-        return RedirectToAction("Index");
+        _products[index].Name = name ?? _products[index].Name;
+        _products[index].Description = description ?? _products[index].Description;
+        _products[index].Price = price != 0 ? price : _products[index].Price;
+        _products[index].Amount = amount != 0 ? amount : _products[index].Amount;
+
+        return View("Index", _products);
     }
 
     public IActionResult DeleteProduct(int productId)
