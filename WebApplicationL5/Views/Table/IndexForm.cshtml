@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Product;
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,19 +8,41 @@
     <h1 class="display-4">Form</h1>
 </div>
 
-<form action = " @Url.Action("UpdateProduct", "Table")" method="Post">
-    Название: <br/>
-    <input type = "text" name = "name" value=""/> <br/>
-    Описание: <br/>
-    <input type = "text" name = "description" value=""/> <br/>
-    Цена: <br/>
-    <input type = "number" name = "price" value=""/> <br/>
-    Количество: <br/>
-    <input type = "number" name = "amount" value=""/> <br/>
-    <input type="submit" name="Отправить"/> <br/>
-</form>
+
+@* Метод AddProduct не передаёт во view модель, а метод UpdateProduct передаёт.
+    исходя из того, была ли передана модель во view (проверкой на null), вызывается соответствующая форма*@
+@if (Model is null)
+{
+    <h3>Добавить новый товар</h3>
+    <form action="@Url.Action("AddProduct", "Table")" method="Post">
+        Название: <br/>
+        <input type="text" name="name" value=""/> <br/>
+        Описание: <br/>
+        <input type="text" name="description" value=""/> <br/>
+        Цена: <br/>
+        <input type="number" name="price" value=""/> <br/>
+        Количество: <br/>
+        <input type="number" name="amount" value=""/> <br/>
+        <input type="submit" name="Отправить"/> <br/>
+    </form>
+}
+else
+{
+    <h3>Изменить товар</h3>
+    <form action="@Url.Action("UpdateProduct", "Table")" method="Post">
+        Название: <br/>
+        <input type="text" name="name" value="@Model.Name"/> <br/>
+        Описание: <br/>
+        <input type="text" name="description" value="@Model.Description"/> <br/>
+        Цена: <br/>
+        <input type="text" name="price" value="@Model.Price"/> <br/>
+        Количество: <br/>
+        <input type="number" name="amount" value="@Model.Amount"/> <br/>
+        <input type="submit" name="Отправить"/> <br/>
+    </form>
+}
 
 
 @section Footer{
-    Кастомный копирайтинг @DateTime.Now
+    Кастомный копирайтинг @DateTime.Now.Year
 }

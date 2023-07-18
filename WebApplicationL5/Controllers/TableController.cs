@@ -53,9 +53,11 @@ public class TableController : Controller
     }
 
     [HttpGet]
-    public IActionResult UpdateProduct()
+    public IActionResult UpdateProduct(int productId)
     {
-        return View("IndexForm");
+        var product = _products.FirstOrDefault(p => p.Id == productId);
+
+        return View("IndexForm", product);
     }
 
     [HttpPost]
@@ -63,13 +65,13 @@ public class TableController : Controller
         [FromForm] string? description, [FromForm] double price, [FromForm] int amount)
     {
         var index = _products.FindIndex(p => p.Id == productId);
-        
+
         _products[index].Name = name ?? _products[index].Name;
         _products[index].Description = description ?? _products[index].Description;
         _products[index].Price = price != 0 ? price : _products[index].Price;
         _products[index].Amount = amount != 0 ? amount : _products[index].Amount;
 
-        return View("Index", _products);
+        return RedirectToAction("Index");
     }
 
     public IActionResult DeleteProduct(int productId)
