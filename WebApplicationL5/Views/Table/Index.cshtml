@@ -23,27 +23,109 @@
                 <th>Описание</th>
                 <th>Цена шт.</th>
                 <th>Количество</th>
-                <th>
-                    Действие
-                </th>
+                <th>Действие_Form</th>
+                <th>Действие_JS</th>
             </tr>
 
             @foreach (var product in Model)
             {
+                var id = product.Id;
                 <tr>
                     <td style="font-style: italic">@product.Id</td>
-                    <td>@product.Name</td>
-                    <td>@product.Description</td>
-                    <td>@product.Price р.</td>
-                    <td>@product.Amount</td>
+                    <td><div id="name_@id">@product.Name</div></td>
+                    <td><div id="description_@id">@product.Description</div></td>
+                    <td><div id="price_@id">@product.Price р.</div></td>
+                    <td><div id="amount_@id">@product.Amount</div></td>
                     <td>
-                        <a class="btn btn-primary, col-lg-3" asp-area="" asp-controller="Table" asp-action="UpdateProduct"
-                           asp-route-productId="@product.Id">✎</a>
-                        <a class="btn btn-primary, col-lg-3" asp-area="" asp-controller="Table" asp-action="DeleteProduct"
-                           asp-route-productId="@product.Id">❌</a>
+                        <a class="btn btn-primary, col-lg-3" asp-area="" asp-controller="Table"
+                           asp-action="UpdateProduct"asp-route-productId="@product.Id">✎</a>
+                        <a class="btn btn-primary, col-lg-3" asp-area="" asp-controller="Table"
+                           asp-action="DeleteProduct"asp-route-productId="@product.Id">❌</a>
+                    </td>
+                    <td>
+                        <button id="edit_button_@id" onclick="onEditClick(@id)">✎</button>
+                        @* <button id="delete_button_@id" onclick="onEditClick(@id)">❌</button> *@
+                        <a class="update_product_{@id}" id = "delete_button_@id" asp-area="" asp-controller="Table"
+                           asp-action="DeleteProduct"asp-route-productId="@product.Id">❌</a>
                     </td>
                 </tr>
             }
         </table>
     </div>
 </div>
+
+<script>
+
+//function editField(id, field) {
+//        let source = document.getElementById(`${field}_${id}`);
+//        let Input = document.createElement("input");
+//        let temp = source.innerText;
+//        Input.value = source.innerText;
+//        source.innerHTML = "";
+//        source.appendChild(Input)
+//        return temp;
+//}
+  function onEditClick(id){
+      let name = document.getElementById(`name_${id}`);
+      let nameInput = document.createElement("input");
+      let temp_name = name.innerText;
+      nameInput.value = name.innerText;
+      name.innerHTML = "";
+      name.appendChild(nameInput);
+      
+      
+      let description = document.getElementById(`description_${id}`);
+      let descriptionInput = document.createElement("input");
+      let temp_description = description.innerText;
+      descriptionInput.value = description.innerText;
+      description.innerHTML = "";
+      description.appendChild(descriptionInput);
+    
+    
+      let price = document.getElementById(`price_${id}`);
+      let priceInput = document.createElement("input");
+      let temp_price = price.innerText;
+      priceInput.value = price.innerText;
+      price.innerHTML = "";
+      price.appendChild(priceInput);    
+    
+    
+      let amount = document.getElementById(`amount_${id}`);
+      let amountInput = document.createElement("input");
+      let temp_amount = amount.innerText;
+      amountInput.value = amount.innerText;
+      amount.innerHTML = "";
+      amount.appendChild(amountInput);
+      
+      
+      let okButton = document.getElementById(`edit_button_${id}`);
+      let cancelButton = document.getElementById(`delete_button_${id}`);
+      
+      let newOkButton = document.createElement("button");
+      let newCancelButton = document.createElement("button");
+      
+      newOkButton.textContent = "Ок";
+      newCancelButton.textContent = "Cancel";
+      
+      okButton.replaceWith(newOkButton);
+      cancelButton.replaceWith(newCancelButton);
+
+      newOkButton.onclick = function (){
+          name.innerText = nameInput.value;
+          description.innerText = descriptionInput.value;
+          price.innerText = `${priceInput.value} р.`;
+          amount.innerText = amountInput.value;
+          newOkButton.replaceWith(okButton);
+          newCancelButton.replaceWith(cancelButton);
+          }
+      
+      newCancelButton.onclick = function (){
+          name.innerText = temp_name;
+          description.innerText = temp_description;
+          price.innerText = temp_price;
+          amount.innerText = temp_amount;
+          newOkButton.replaceWith(okButton);
+          newCancelButton.replaceWith(cancelButton);
+      }
+}  
+</script>;

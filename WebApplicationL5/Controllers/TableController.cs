@@ -27,13 +27,13 @@ public class TableController : Controller
         return View(_products);
     }
 
-    [HttpGet]
+    [HttpGet("add-product")]
     public IActionResult AddProduct()
     {
         return View("IndexForm");
     }
 
-    [HttpPost]
+    [HttpPost("add-product")]
     public IActionResult AddProduct([FromForm] string name, [FromForm] string description,
         [FromForm] double price, [FromForm] int amount)
     {
@@ -49,10 +49,10 @@ public class TableController : Controller
         _id++;
         _products.Add(product);
 
-        return Redirect("Index");
+        return RedirectToAction("Index");
     }
 
-    [HttpGet]
+    [HttpGet("update-product-{productId}")]
     public IActionResult UpdateProduct(int productId)
     {
         var product = _products.FirstOrDefault(p => p.Id == productId);
@@ -60,7 +60,7 @@ public class TableController : Controller
         return View("IndexForm", product);
     }
 
-    [HttpPost]
+    [HttpPost("update-product-{productId}")]
     public IActionResult UpdateProduct([FromRoute] int productId, [FromForm] string? name,
         [FromForm] string? description, [FromForm] double price, [FromForm] int amount)
     {
@@ -74,6 +74,7 @@ public class TableController : Controller
         return RedirectToAction("Index");
     }
 
+    [HttpGet("delete{productId}")]
     public IActionResult DeleteProduct(int productId)
     {
         var index = _products.FindIndex(p => p.Id == productId);
