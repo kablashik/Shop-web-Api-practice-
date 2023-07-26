@@ -23,30 +23,50 @@
                 <th>Описание</th>
                 <th>Цена шт.</th>
                 <th>Количество</th>
-                <th>Действие_Form</th>
-                <th>Действие_JS</th>
+                <th>Действие<br>(with form)</th>
+                <th>Действие<br>(with JS)</th>
+                <th>Действие<br>(with fetch)</th>
             </tr>
 
             @foreach (var product in Model)
             {
                 var id = product.Id;
-                <tr>
+                <tr id="row_@id">
                     <td style="font-style: italic">@product.Id</td>
-                    <td><div id="name_@id">@product.Name</div></td>
-                    <td><div id="description_@id">@product.Description</div></td>
-                    <td><div id="price_@id">@product.Price р.</div></td>
-                    <td><div id="amount_@id">@product.Amount</div></td>
+                    <td>
+                        <div id="name_@id">@product.Name</div>
+                    </td>
+                    <td>
+                        <div id="description_@id">@product.Description</div>
+                    </td>
+                    <td>
+                        <div id="price_@id">@product.Price р.</div>
+                    </td>
+                    <td>
+                        <div id="amount_@id">@product.Amount</div>
+                    </td>
                     <td>
                         <a class="btn btn-primary, col-lg-3" asp-area="" asp-controller="Table"
-                           asp-action="UpdateProduct"asp-route-productId="@product.Id">✎</a>
+                           asp-action="UpdateProduct"asp-route-productId="@product.Id">
+                            ✎
+                        </a>
                         <a class="btn btn-primary, col-lg-3" asp-area="" asp-controller="Table"
-                           asp-action="DeleteProduct"asp-route-productId="@product.Id">❌</a>
+                           asp-action="DeleteProduct"asp-route-productId="@product.Id">
+                            ❌
+                        </a>
                     </td>
                     <td>
                         <button id="edit_button_@id" onclick="onEditClick(@id)">✎</button>
                         @* <button id="delete_button_@id" onclick="onEditClick(@id)">❌</button> *@
-                        <a class="update_product_{@id}" id = "delete_button_@id" asp-area="" asp-controller="Table"
-                           asp-action="DeleteProduct"asp-route-productId="@product.Id">❌</a>
+                        <a class="update_product_{@id}" id="delete_button_@id" asp-area="" asp-controller="Table"
+                           asp-action="DeleteProduct"asp-route-productId="@product.Id">
+                            ❌
+                        </a>
+                    </td>
+                    <td>
+                        <button onclick="onCreateClick()">➕</button>
+                        <button onclick="onEditClick_(@id)">✎</button>
+                        <button onclick="onDeleteClick(@id)">❌</button>
                     </td>
                 </tr>
             }
@@ -54,24 +74,48 @@
     </div>
 </div>
 
+@*Using fetch*@
 <script>
+    async function onDeleteClick(id){
+        let response = await fetch(`delete-${id}`);
+        if (response.ok){
+             let rowToDelete = document.getElementById(`row_${id}`)
+             rowToDelete.remove();
+        } else {
+            alert("Ошибка: " + response.status);
+        }
+    }
+    
+    async function onCreateClick(){
+        let repsonse = await fetch(`add-product`);
+       //let name = document.getElementById(`name_${id}`);
+       //let nameInput = document.createElement("input");
+       //name.innerHTML = "";
+       //name.appendChild(nameInput);
+    }
 
-//function editField(id, field) {
-//        let source = document.getElementById(`${field}_${id}`);
-//        let Input = document.createElement("input");
-//        let temp = source.innerText;
-//        Input.value = source.innerText;
-//        source.innerHTML = "";
-//        source.appendChild(Input)
-//        return temp;
-//}
+</script>
+
+@*Using only JS*@
+<script>  
+
+   // function addInput(id, inputName){
+   //     let element = document.getElementById(`${inputName}_${id}`);
+   //           let Input = document.createElement("input");
+   //           Input.id = `${inputName}-${id}`;
+   //           let temp_element = element.innerText;
+   //           Input.value = element.innerText;
+   //           element.innerHTML = "";
+   //           element.appendChild(Input);
+   // }  
   function onEditClick(id){
-      let name = document.getElementById(`name_${id}`);
-      let nameInput = document.createElement("input");
-      let temp_name = name.innerText;
-      nameInput.value = name.innerText;
-      name.innerHTML = "";
-      name.appendChild(nameInput);
+        
+    let name = document.getElementById(`name_${id}`);
+    let nameInput = document.createElement("input");
+    let temp_name = name.innerText;
+    nameInput.value = name.innerText;
+    name.innerHTML = "";
+    name.appendChild(nameInput);
       
       
       let description = document.getElementById(`description_${id}`);

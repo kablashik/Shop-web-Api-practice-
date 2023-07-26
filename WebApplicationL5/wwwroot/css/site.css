@@ -27,7 +27,7 @@ body {
 .myTable table
 {
   border-collapse: collapse;
-  width: 60%;
+  width: 100%;
 }
 
 .myTable th

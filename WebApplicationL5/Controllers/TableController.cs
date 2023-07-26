@@ -5,7 +5,7 @@ namespace WebApplicationL5.Controllers;
 
 public class TableController : Controller
 {
-    private static List<Product> _products = new();
+    public static List<Product> _products = new();
     private static int _id;
 
     private readonly string[] _items =
@@ -74,7 +74,7 @@ public class TableController : Controller
         return RedirectToAction("Index");
     }
 
-    [HttpGet("delete{productId}")]
+    [HttpGet("delete-{productId}")]
     public IActionResult DeleteProduct(int productId)
     {
         var index = _products.FindIndex(p => p.Id == productId);
@@ -83,7 +83,7 @@ public class TableController : Controller
         return RedirectToAction("Index");
     }
 
-    private void CreateFirstFiveProducts()
+    public void CreateFirstFiveProducts()
     {
         var random = new Random();
 
