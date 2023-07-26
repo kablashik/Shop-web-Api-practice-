@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationL5.Models;
 
@@ -34,22 +35,22 @@ public class TableController : Controller
     }
 
     [HttpPost("add-product")]
-    public IActionResult AddProduct([FromForm] string name, [FromForm] string description,
-        [FromForm] double price, [FromForm] int amount)
+    public IActionResult AddProduct([FromForm] [FromBody] Product product)
     {
-        var product = new Product
-        {
-            Id = _id,
-            Name = name,
-            Description = description,
-            Price = price,
-            Amount = amount
-        };
-
+        product.Id = _id;
         _id++;
         _products.Add(product);
 
         return RedirectToAction("Index");
+    }
+    [HttpPost("add-product-json")]
+    public IActionResult AddProductJson([FromBody] Product product)
+    {
+        product.Id = _id;
+        _id++;
+        _products.Add(product);
+
+        return Ok(); 
     }
 
     [HttpGet("update-product-{productId}")]
@@ -95,7 +96,7 @@ public class TableController : Controller
             var price = Math.Round(random.NextDouble() * 100, 2);
             var amount = random.Next(0, 100);
 
-            AddProduct(name, description, price, amount);
+            AddProduct(new Product(){Name = name, Description = description, Price = price, Amount = amount});
         }
     }
 }

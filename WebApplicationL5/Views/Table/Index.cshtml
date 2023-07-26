@@ -87,11 +87,21 @@
     }
     
     async function onCreateClick(){
-        let repsonse = await fetch(`add-product`);
-       //let name = document.getElementById(`name_${id}`);
-       //let nameInput = document.createElement("input");
-       //name.innerHTML = "";
-       //name.appendChild(nameInput);
+       
+       let product  = {
+             Name: 'Product Name',
+             Description: 'Product Description',
+             Price: 10,
+             Amount: 100};
+       
+       
+      await fetch('add-product-json', {
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json'
+           },
+           body: JSON.stringify(product)
+       })
     }
 
 </script>
