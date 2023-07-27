@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kos2a\\RiderProjects\\WebApplicationL5\\WebApplicationL5\\WebApplicationL5.csproj": {}
+    "C:\\Users\\kablash_k\\RiderProjects\\HW-L7\\WebApplicationL5\\WebApplicationL5.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kos2a\\RiderProjects\\WebApplicationL5\\WebApplicationL5\\WebApplicationL5.csproj": {
+    "C:\\Users\\kablash_k\\RiderProjects\\HW-L7\\WebApplicationL5\\WebApplicationL5.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kos2a\\RiderProjects\\WebApplicationL5\\WebApplicationL5\\WebApplicationL5.csproj",
+        "projectUniqueName": "C:\\Users\\kablash_k\\RiderProjects\\HW-L7\\WebApplicationL5\\WebApplicationL5.csproj",
         "projectName": "WebApplicationL5",
-        "projectPath": "C:\\Users\\kos2a\\RiderProjects\\WebApplicationL5\\WebApplicationL5\\WebApplicationL5.csproj",
-        "packagesPath": "C:\\Users\\kos2a\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kos2a\\RiderProjects\\WebApplicationL5\\WebApplicationL5\\obj\\",
+        "projectPath": "C:\\Users\\kablash_k\\RiderProjects\\HW-L7\\WebApplicationL5\\WebApplicationL5.csproj",
+        "packagesPath": "C:\\Users\\kablash_k\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\kablash_k\\RiderProjects\\HW-L7\\WebApplicationL5\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kos2a\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\kablash_k\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -50,6 +48,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.12, 6.0.12]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[6.0.12, 6.0.12]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.12, 6.0.12]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.12, 6.0.12]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -58,7 +74,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.405\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\kablash_k\\.dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

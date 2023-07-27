@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "QaVLKgMuXfCt+FVUiPKEiziCE4/+aaeBB9X2rrV1hDOJ3S5Lo3LbVLW+LexPBm36kPWDz6vt5J0B0EaRFXs7kw==",
+  "dgSpecHash": "sqDIgKp1Ezy1lAs0QVVYmMTOGUmX53f9uV8oc0rYmVdAQiUUcMfAMSdxuAx7RX+dRQZcuuH8ayj6AUsZGiAjbQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\kos2a\\RiderProjects\\WebApplicationL5\\WebApplicationL5\\WebApplicationL5.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\kablash_k\\RiderProjects\\HW-L7\\WebApplicationL5\\WebApplicationL5.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\kablash_k\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.12\\microsoft.netcore.app.ref.6.0.12.nupkg.sha512",
+    "C:\\Users\\kablash_k\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.12\\microsoft.windowsdesktop.app.ref.6.0.12.nupkg.sha512",
+    "C:\\Users\\kablash_k\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.12\\microsoft.aspnetcore.app.ref.6.0.12.nupkg.sha512",
+    "C:\\Users\\kablash_k\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.12\\microsoft.netcore.app.host.win-x64.6.0.12.nupkg.sha512"
+  ],
   "logs": []
 }

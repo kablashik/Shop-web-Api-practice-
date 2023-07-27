@@ -56,7 +56,7 @@
                         </a>
                     </td>
                     <td>
-                        <button id="edit_button_@id" onclick="onEditClick(@id)">✎</button>
+                        <button id="edit_button_@id" onclick="onTest(@id)">✎</button>
                         @* <button id="delete_button_@id" onclick="onEditClick(@id)">❌</button> *@
                         <a class="update_product_{@id}" id="delete_button_@id" asp-area="" asp-controller="Table"
                            asp-action="DeleteProduct"asp-route-productId="@product.Id">
@@ -108,24 +108,56 @@
 
 @*Using only JS*@
 <script>  
-
-   // function addInput(id, inputName){
-   //     let element = document.getElementById(`${inputName}_${id}`);
-   //           let Input = document.createElement("input");
-   //           Input.id = `${inputName}-${id}`;
-   //           let temp_element = element.innerText;
-   //           Input.value = element.innerText;
-   //           element.innerHTML = "";
-   //           element.appendChild(Input);
-   // }  
-  function onEditClick(id){
+   
+    function onTest(rowID)
+    {
+        let row = document.getElementById(`row_${rowID}`)
+        let cells = row.getElementsByTagName('td')
         
-    let name = document.getElementById(`name_${id}`);
-    let nameInput = document.createElement("input");
-    let temp_name = name.innerText;
-    nameInput.value = name.innerText;
-    name.innerHTML = "";
-    name.appendChild(nameInput);
+        for (let cellID = 1; cellID < 5; cellID++)
+        {
+            addInputAndHideText(cells[cellID], rowID, cellID);
+        }
+        
+        replaceButton('edit_button', rowID, 'OK')
+        replaceButton('delete_button', rowID, 'Cancel')
+    }
+    
+    function addInputAndHideText(cell, rowID, cellID)
+    {
+        let input = document.createElement("input");
+        input.id = `input_row_${rowID}_cell_${cellID}`;
+        input.value = cell.innerText;
+        cell.appendChild(input);
+        cell.querySelector('div').style.display = 'none';
+    }
+    
+    function replaceButton(route, id, name)
+    {
+        let Button = document.getElementById(`${route}_${id}`);
+        let newButton = document.createElement("button");
+        
+        newButton.onclick = confirm;
+        newButton.textContent = name;
+        Button.replaceWith(newButton);
+    }
+    
+    function confirm()
+    {
+        alert(`OK`);
+    }
+    
+/*    function onEditClick(id){
+        
+      let name = document.getElementById(`name_${id}`);
+      let nameInput = document.createElement("input");
+      nameInput.id = "123t";
+      nameInput.innerText = name.innerText;
+      let temp_name = name.innerText;
+      nameInput.value = name.innerText;
+      //name.innerHTML = "";
+      name.style.display = "none";
+      name.parentNode.appendChild(nameInput);
       
       
       let description = document.getElementById(`description_${id}`);
@@ -152,34 +184,44 @@
       amount.appendChild(amountInput);
       
       
-      let okButton = document.getElementById(`edit_button_${id}`);
-      let cancelButton = document.getElementById(`delete_button_${id}`);
+      let editButton = document.getElementById(`edit_button_${id}`);
+      let deleteButton = document.getElementById(`delete_button_${id}`);
       
-      let newOkButton = document.createElement("button");
+      let newOkButton =
+       document.createElement("button");
       let newCancelButton = document.createElement("button");
       
       newOkButton.textContent = "Ок";
       newCancelButton.textContent = "Cancel";
       
-      okButton.replaceWith(newOkButton);
-      cancelButton.replaceWith(newCancelButton);
+      editButton.replaceWith(newOkButton);
+      deleteButton.replaceWith(newCancelButton);
 
       newOkButton.onclick = function (){
           name.innerText = nameInput.value;
+          
+          let newText = document.getElementById("123t");
+          name.innerText = newText.innerText;
+          newText.remove();
+          name.style.display = ""
+
           description.innerText = descriptionInput.value;
           price.innerText = `${priceInput.value} р.`;
           amount.innerText = amountInput.value;
-          newOkButton.replaceWith(okButton);
-          newCancelButton.replaceWith(cancelButton);
+          newOkButton.replaceWith(editButton);
+          newCancelButton.replaceWith(deleteButton);
           }
       
       newCancelButton.onclick = function (){
-          name.innerText = temp_name;
+          //name.innerText = temp_name;
+          document.getElementById(`123t`).remove();
+          //nameInput.remove();
+          name.style.display = ""
           description.innerText = temp_description;
           price.innerText = temp_price;
           amount.innerText = temp_amount;
-          newOkButton.replaceWith(okButton);
-          newCancelButton.replaceWith(cancelButton);
+          newOkButton.replaceWith(editButton);
+          newCancelButton.replaceWith(deleteButton);
       }
-}  
+} */
 </script>;
