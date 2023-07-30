@@ -10,7 +10,7 @@
 
 
     <div class="myTable">
-        <table>
+        <table id = "table_1">
 
             <tr>
                 <th>
@@ -56,12 +56,8 @@
                         </a>
                     </td>
                     <td>
-                        <button id="edit_button_@id" onclick="onTest(@id)">✎</button>
-                        @* <button id="delete_button_@id" onclick="onEditClick(@id)">❌</button> *@
-                        <a class="update_product_{@id}" id="delete_button_@id" asp-area="" asp-controller="Table"
-                           asp-action="DeleteProduct"asp-route-productId="@product.Id">
-                            ❌
-                        </a>
+                        <button id="edit_button_@id" onclick="onEditButton(@id)">✎</button>
+                        <button id="delete_button_@id" onclick="onDeleteClick(@id)">❌</button>
                     </td>
                     <td>
                         <button onclick="onCreateClick()">➕</button>
@@ -88,6 +84,11 @@
     
     async function onCreateClick(){
        
+       //let lastRowID = document.lastChild("tbody");
+       //alert(lastRowID);
+       //let lastRow = document.getElementById("lastRowID");
+        
+        
        let product  = {
              Name: 'Product Name',
              Description: 'Product Description',
@@ -109,18 +110,18 @@
 @*Using only JS*@
 <script>  
    
-    function onTest(rowID)
+    function onEditButton(rowID)
     {
-        let row = document.getElementById(`row_${rowID}`)
-        let cells = row.getElementsByTagName('td')
+        let row = document.getElementById(`row_${rowID}`);
+        let cell = row.getElementsByTagName('td');
         
         for (let cellID = 1; cellID < 5; cellID++)
         {
-            addInputAndHideText(cells[cellID], rowID, cellID);
+            addInputAndHideText(cell[cellID], rowID, cellID);
         }
         
-        replaceButton('edit_button', rowID, 'OK')
-        replaceButton('delete_button', rowID, 'Cancel')
+        ReplaceEditButtons('edit_button', rowID, 'OK');
+        ReplaceEditButtons('delete_button', rowID, 'Cancel');
     }
     
     function addInputAndHideText(cell, rowID, cellID)
@@ -132,19 +133,57 @@
         cell.querySelector('div').style.display = 'none';
     }
     
-    function replaceButton(route, id, name)
+    function ReplaceEditButtons(route, id, name)
     {
-        let Button = document.getElementById(`${route}_${id}`);
+        let button = document.getElementById(`${route}_${id}`);
         let newButton = document.createElement("button");
-        
-        newButton.onclick = confirm;
         newButton.textContent = name;
-        Button.replaceWith(newButton);
+        newButton.id = `${name}_button_${id}`;
+        
+        name === "OK" ? newButton.onclick = () => confirm(id, true) : null;
+        name === "Cancel" ? newButton.onclick = () => confirm(id, false) : null;
+        
+        button.replaceWith(newButton);           
     }
     
-    function confirm()
+    function ReturnEditButtons(id)
     {
-        alert(`OK`);
+        let OkButton = document.getElementById(`OK_button_${id}`)
+        let newEditButton = document.createElement("button");
+        newEditButton.textContent = "✎";
+        newEditButton.id = `edit_button_${id}`;
+        newEditButton.onclick = () =>onEditButton(id);
+        
+        let deleteButton = document.getElementById(`Cancel_button_${id}`)
+        let newDeleteButton = document.createElement("button");
+        newDeleteButton.textContent = "❌";
+        newDeleteButton.id = `delete_button_${id}`;
+        
+        
+        OkButton.replaceWith(newEditButton);
+        deleteButton.replaceWith(newDeleteButton);
+    }
+    
+    function confirm(id, bool)
+    {
+        let row = document.getElementById(`row_${id}`);
+        let cell = row.getElementsByTagName('td');
+        
+        for (let cellID = 1; cellID < 5; cellID++)
+        {
+           let input = document.getElementById(`input_row_${id}_cell_${cellID}`);
+           let element = cell[cellID].querySelector('div');
+           
+           if (bool)
+           {
+             element.innerText = input.value;
+           }
+           
+           input.remove();
+           element.style.display = '';
+        }        
+        
+        ReturnEditButtons(id);
     }
     
 /*    function onEditClick(id){
