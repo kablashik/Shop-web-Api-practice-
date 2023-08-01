@@ -82,53 +82,72 @@
         }
     }
     
-    async function onCreateClick(){
-       
-       //let lastRowID = document.lastChild("tbody");
-       //alert(lastRowID);
-       //let lastRow = document.getElementById("lastRowID");
+    async function onCreateClick()
+    {
+        addRow();
         
-        
-       let product  = {
-             Name: 'Product Name',
-             Description: 'Product Description',
-             Price: 10,
-             Amount: 100};
-       
-       
-      await fetch('add-product-json', {
-           method: 'POST',
-           headers: {
-               'Content-Type': 'application/json'
-           },
-           body: JSON.stringify(product)
-       })
     }
+       
+    
+    function addRow()
+    {
+       let table = document.getElementById("table_1");
+       let rows = table.getElementsByTagName("tr");
+       let lastRow = rows[rows.length - 1];
+       let duplicateRow = lastRow.cloneNode(true);
+       table.appendChild(duplicateRow)
+       lastRow = rows[rows.length - 1];
+
+       let cell = lastRow.getElementsByTagName("td");
+       cell[0].innerHTML ++;
+       let ID = cell[0].innerHTML;
+       
+           for (let i = 1; i < 5; i++) 
+           {
+             cell[i].innerHTML = ""; 
+             addInputAndHideText(cell[cellID], ID, cellID, true);
+           }
+    }
+    
+     // let product  = {
+     //       Name: 'Product Name',
+     //       Description: 'Product Description',
+     //       Price: 10,
+     //       Amount: 100};
+     // 
+     // 
+     //await fetch('add-product-json', {
+     //     method: 'POST',
+     //     headers: {
+     //         'Content-Type': 'application/json'
+     //     },
+     //     body: JSON.stringify(product)
+     // })
 
 </script>
 
-@*Using only JS*@
+@*Using JS only*@
 <script>  
    
-    function onEditButton(rowID)
+    function onEditButton(ID)
     {
-        let row = document.getElementById(`row_${rowID}`);
+        let row = document.getElementById(`row_${ID}`);
         let cell = row.getElementsByTagName('td');
         
         for (let cellID = 1; cellID < 5; cellID++)
         {
-            addInputAndHideText(cell[cellID], rowID, cellID);
+            addInputAndHideText(cell[cellID], ID, cellID, true);
         }
         
-        ReplaceEditButtons('edit_button', rowID, 'OK');
-        ReplaceEditButtons('delete_button', rowID, 'Cancel');
+        ReplaceEditButtons('edit_button', ID, 'OK');
+        ReplaceEditButtons('delete_button', ID, 'Cancel');
     }
     
-    function addInputAndHideText(cell, rowID, cellID)
+    function addInputAndHideText(cell, rowID, cellID, savePrevValue)
     {
         let input = document.createElement("input");
         input.id = `input_row_${rowID}_cell_${cellID}`;
-        input.value = cell.innerText;
+        savePrevValue === true ? input.value = cell.innerText : "";
         cell.appendChild(input);
         cell.querySelector('div').style.display = 'none';
     }
@@ -186,81 +205,4 @@
         ReturnEditButtons(id);
     }
     
-/*    function onEditClick(id){
-        
-      let name = document.getElementById(`name_${id}`);
-      let nameInput = document.createElement("input");
-      nameInput.id = "123t";
-      nameInput.innerText = name.innerText;
-      let temp_name = name.innerText;
-      nameInput.value = name.innerText;
-      //name.innerHTML = "";
-      name.style.display = "none";
-      name.parentNode.appendChild(nameInput);
-      
-      
-      let description = document.getElementById(`description_${id}`);
-      let descriptionInput = document.createElement("input");
-      let temp_description = description.innerText;
-      descriptionInput.value = description.innerText;
-      description.innerHTML = "";
-      description.appendChild(descriptionInput);
-    
-    
-      let price = document.getElementById(`price_${id}`);
-      let priceInput = document.createElement("input");
-      let temp_price = price.innerText;
-      priceInput.value = price.innerText;
-      price.innerHTML = "";
-      price.appendChild(priceInput);    
-    
-    
-      let amount = document.getElementById(`amount_${id}`);
-      let amountInput = document.createElement("input");
-      let temp_amount = amount.innerText;
-      amountInput.value = amount.innerText;
-      amount.innerHTML = "";
-      amount.appendChild(amountInput);
-      
-      
-      let editButton = document.getElementById(`edit_button_${id}`);
-      let deleteButton = document.getElementById(`delete_button_${id}`);
-      
-      let newOkButton =
-       document.createElement("button");
-      let newCancelButton = document.createElement("button");
-      
-      newOkButton.textContent = "Ок";
-      newCancelButton.textContent = "Cancel";
-      
-      editButton.replaceWith(newOkButton);
-      deleteButton.replaceWith(newCancelButton);
-
-      newOkButton.onclick = function (){
-          name.innerText = nameInput.value;
-          
-          let newText = document.getElementById("123t");
-          name.innerText = newText.innerText;
-          newText.remove();
-          name.style.display = ""
-
-          description.innerText = descriptionInput.value;
-          price.innerText = `${priceInput.value} р.`;
-          amount.innerText = amountInput.value;
-          newOkButton.replaceWith(editButton);
-          newCancelButton.replaceWith(deleteButton);
-          }
-      
-      newCancelButton.onclick = function (){
-          //name.innerText = temp_name;
-          document.getElementById(`123t`).remove();
-          //nameInput.remove();
-          name.style.display = ""
-          description.innerText = temp_description;
-          price.innerText = temp_price;
-          amount.innerText = temp_amount;
-          newOkButton.replaceWith(editButton);
-          newCancelButton.replaceWith(deleteButton);
-      }
-} */
 </script>;
