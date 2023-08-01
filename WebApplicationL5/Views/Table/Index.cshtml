@@ -23,9 +23,11 @@
                 <th>Описание</th>
                 <th>Цена шт.</th>
                 <th>Количество</th>
+                @*
                 <th>Действие<br>(with form)</th>
                 <th>Действие<br>(with JS)</th>
-                <th>Действие<br>(with fetch)</th>
+                *@
+                <th>Действие</th>
             </tr>
 
             @foreach (var product in Model)
@@ -45,25 +47,28 @@
                     <td>
                         <div id="amount_@id">@product.Amount</div>
                     </td>
+                    @*
                     <td>
                         <a class="btn btn-primary, col-lg-3" asp-area="" asp-controller="Table"
-                           asp-action="UpdateProduct"asp-route-productId="@product.Id">
+                           asp-action="UpdateProduct" asp-route-productId="@product.Id">
                             ✎
                         </a>
                         <a class="btn btn-primary, col-lg-3" asp-area="" asp-controller="Table"
-                           asp-action="DeleteProduct"asp-route-productId="@product.Id">
+                           asp-action="DeleteProduct" asp-route-productId="@product.Id">
                             ❌
                         </a>
                     </td>
+                    *@
                     <td>
+                        <button id = "create_button_@id" onclick="onCreateClick()">➕</button>
                         <button id="edit_button_@id" onclick="onEditButton(@id)">✎</button>
                         <button id="delete_button_@id" onclick="onDeleteClick(@id)">❌</button>
                     </td>
-                    <td>
+                    @*<td>
                         <button onclick="onCreateClick()">➕</button>
                         <button onclick="onEditClick_(@id)">✎</button>
                         <button onclick="onDeleteClick(@id)">❌</button>
-                    </td>
+                    </td>*@
                 </tr>
             }
         </table>
@@ -82,51 +87,32 @@
         }
     }
     
-    async function onCreateClick()
-    {
-        addRow();
+    async function onCreateClick(){
+       
+       //let lastRowID = document.lastChild("tbody");
+       //alert(lastRowID);
+       //let lastRow = document.getElementById("lastRowID");
         
-    }
+        
+       let product  = {
+             Name: 'Product Name',
+             Description: 'Product Description',
+             Price: 10,
+             Amount: 100};
        
-    
-    function addRow()
-    {
-       let table = document.getElementById("table_1");
-       let rows = table.getElementsByTagName("tr");
-       let lastRow = rows[rows.length - 1];
-       let duplicateRow = lastRow.cloneNode(true);
-       table.appendChild(duplicateRow)
-       lastRow = rows[rows.length - 1];
-
-       let cell = lastRow.getElementsByTagName("td");
-       cell[0].innerHTML ++;
-       let ID = cell[0].innerHTML;
        
-           for (let i = 1; i < 5; i++) 
-           {
-             cell[i].innerHTML = ""; 
-             addInputAndHideText(cell[cellID], ID, cellID, true);
-           }
+      await fetch('add-product-json', {
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json'
+           },
+           body: JSON.stringify(product)
+       })
     }
-    
-     // let product  = {
-     //       Name: 'Product Name',
-     //       Description: 'Product Description',
-     //       Price: 10,
-     //       Amount: 100};
-     // 
-     // 
-     //await fetch('add-product-json', {
-     //     method: 'POST',
-     //     headers: {
-     //         'Content-Type': 'application/json'
-     //     },
-     //     body: JSON.stringify(product)
-     // })
 
 </script>
 
-@*Using JS only*@
+@*Using only JS*@
 <script>  
    
     function onEditButton(ID)
@@ -136,18 +122,18 @@
         
         for (let cellID = 1; cellID < 5; cellID++)
         {
-            addInputAndHideText(cell[cellID], ID, cellID, true);
+            addInputAndHideText(cell[cellID], ID, cellID);
         }
         
         ReplaceEditButtons('edit_button', ID, 'OK');
         ReplaceEditButtons('delete_button', ID, 'Cancel');
     }
     
-    function addInputAndHideText(cell, rowID, cellID, savePrevValue)
+    function addInputAndHideText(cell, rowID, cellID)
     {
         let input = document.createElement("input");
         input.id = `input_row_${rowID}_cell_${cellID}`;
-        savePrevValue === true ? input.value = cell.innerText : "";
+        input.value = cell.innerText;
         cell.appendChild(input);
         cell.querySelector('div').style.display = 'none';
     }
@@ -163,6 +149,8 @@
         name === "Cancel" ? newButton.onclick = () => confirm(id, false) : null;
         
         button.replaceWith(newButton);           
+        
+        document.getElementById(`create_button_${id}`).style.display = 'none';
     }
     
     function ReturnEditButtons(id)
@@ -181,28 +169,75 @@
         
         OkButton.replaceWith(newEditButton);
         deleteButton.replaceWith(newDeleteButton);
+        
+        document.getElementById(`create_button_${id}`).style.display = '';
+
     }
     
-    function confirm(id, bool)
+    function confirm(id, saveChanges)
     {
         let row = document.getElementById(`row_${id}`);
         let cell = row.getElementsByTagName('td');
         
+        let fields = [];
         for (let cellID = 1; cellID < 5; cellID++)
         {
            let input = document.getElementById(`input_row_${id}_cell_${cellID}`);
            let element = cell[cellID].querySelector('div');
+           fields.push(input.value);
            
-           if (bool)
+
+           if (saveChanges)
            {
              element.innerText = input.value;
            }
            
            input.remove();
            element.style.display = '';
-        }        
+        }     
+        
+        let product = createProductFromInput(fields);
+        
+        if (saveChanges)
+        {
+            updateProduct(product);
+        }
         
         ReturnEditButtons(id);
+    }
+    
+    function createProductFromInput(field)
+    {            
+        return {
+         Name: `${field[0]}`,
+         Description: `${field[1]}`,
+         Price: parseInt(field[2]),
+         Amount: parseInt(field[3])
+        };
+    }
+    
+    async function addNewProduct(product)
+    {
+         await fetch('add-product-json', 
+         {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(product)
+         })
+    }
+    
+    async function updateProduct(product)
+    {
+         await fetch('update-product-json"', 
+         {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(product)
+         })
     }
     
 </script>;

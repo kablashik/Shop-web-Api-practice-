@@ -53,6 +53,15 @@ public class TableController : Controller
         return Ok(); 
     }
 
+    [HttpPost("update-product-json")]
+    public IActionResult UpdateProductJson([FromBody] Product updatedProduct, int id)
+    {
+        var product = _products.FirstOrDefault(p => p.Id == id);
+        product = updatedProduct;
+        return Ok(); 
+    }
+
+
     [HttpGet("update-product-{productId}")]
     public IActionResult UpdateProduct(int productId)
     {
