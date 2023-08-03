@@ -28,11 +28,6 @@ public class TableController : Controller
         return View(_products);
     }
 
-    [HttpGet("add-product")]
-    public IActionResult AddProduct()
-    {
-        return View("IndexForm");
-    }
 
     [HttpPost("add-product")]
     public IActionResult AddProduct([FromForm] [FromBody] Product product)
@@ -43,6 +38,7 @@ public class TableController : Controller
 
         return RedirectToAction("Index");
     }
+
     [HttpPost("add-product-json")]
     public IActionResult AddProductJson([FromBody] Product product)
     {
@@ -50,40 +46,27 @@ public class TableController : Controller
         _id++;
         _products.Add(product);
 
-        return Ok(); 
+        return Ok(new { id = product.Id });
     }
 
-    [HttpPost("update-product-json")]
-    public IActionResult UpdateProductJson([FromBody] Product updatedProduct, int id)
+    [HttpPost("update-product-json/{id}")]
+    public IActionResult UpdateProductJson(int id, [FromBody] Product updatedProduct)
     {
         var product = _products.FirstOrDefault(p => p.Id == id);
-        product = updatedProduct;
-        return Ok(); 
+        if (product != null)
+        {
+            product.Name = updatedProduct.Name;
+            product.Description = updatedProduct.Description;
+            product.Price = updatedProduct.Price;
+            product.Amount = updatedProduct.Amount;
+            return Ok();
+        }
+        else
+        {
+            return NotFound();
+        }
     }
-
-
-    [HttpGet("update-product-{productId}")]
-    public IActionResult UpdateProduct(int productId)
-    {
-        var product = _products.FirstOrDefault(p => p.Id == productId);
-
-        return View("IndexForm", product);
-    }
-
-    [HttpPost("update-product-{productId}")]
-    public IActionResult UpdateProduct([FromRoute] int productId, [FromForm] string? name,
-        [FromForm] string? description, [FromForm] double price, [FromForm] int amount)
-    {
-        var index = _products.FindIndex(p => p.Id == productId);
-
-        _products[index].Name = name ?? _products[index].Name;
-        _products[index].Description = description ?? _products[index].Description;
-        _products[index].Price = price != 0 ? price : _products[index].Price;
-        _products[index].Amount = amount != 0 ? amount : _products[index].Amount;
-
-        return RedirectToAction("Index");
-    }
-
+    
     [HttpGet("delete-{productId}")]
     public IActionResult DeleteProduct(int productId)
     {
@@ -105,7 +88,7 @@ public class TableController : Controller
             var price = Math.Round(random.NextDouble() * 100, 2);
             var amount = random.Next(0, 100);
 
-            AddProduct(new Product(){Name = name, Description = description, Price = price, Amount = amount});
+            AddProduct(new Product() { Name = name, Description = description, Price = price, Amount = amount });
         }
     }
 }
