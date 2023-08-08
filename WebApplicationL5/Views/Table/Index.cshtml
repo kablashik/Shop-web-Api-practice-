@@ -19,20 +19,20 @@
 
             @foreach (var product in Model)
             {
-                var id = product.Id;
+                var id = product.ProductId;
                 <tr id="row_@id">
-                    <td id="index_@id" style="font-style: italic">@product.Id</td>
+                    <td id="index_@id" style="font-style: italic">@product.ProductId</td>
                     <td>
-                        <div id="name_@id">@product.Name</div>
+                        <div id="name_@id">@product.ProductName</div>
                     </td>
                     <td>
-                        <div id="description_@id">@product.Description</div>
+                        <div id="description_@id">@product.ProductDescription</div>
                     </td>
                     <td>
-                        <div id="price_@id">@product.Price р.</div>
+                        <div id="price_@id">@product.ProductPrice р.</div>
                     </td>
                     <td>
-                        <div id="amount_@id">@product.Amount</div>
+                        <div id="amount_@id">@product.ProductAmount</div>
                     </td>
                     <td>
                         <button id="create_button_@id" onclick="onCreateClick(@id)">➕</button>
@@ -225,4 +225,4 @@
             }
         }
     }        
-</script>;
+</script>

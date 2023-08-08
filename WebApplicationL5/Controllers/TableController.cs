@@ -32,7 +32,7 @@ public class TableController : Controller
     [HttpPost("add-product")]
     public IActionResult AddProduct([FromForm] [FromBody] Product product)
     {
-        product.Id = _id;
+        product.ProductId = _id;
         _id++;
         _products.Add(product);
 
@@ -42,23 +42,23 @@ public class TableController : Controller
     [HttpPost("add-product-json")]
     public IActionResult AddProductJson([FromBody] Product product)
     {
-        product.Id = _id;
+        product.ProductId = _id;
         _id++;
         _products.Add(product);
 
-        return Ok(new { id = product.Id });
+        return Ok(new { id = product.ProductId });
     }
 
     [HttpPost("update-product-json/{id}")]
     public IActionResult UpdateProductJson(int id, [FromBody] Product updatedProduct)
     {
-        var product = _products.FirstOrDefault(p => p.Id == id);
+        var product = _products.FirstOrDefault(p => p.ProductId == id);
         if (product != null)
         {
-            product.Name = updatedProduct.Name;
-            product.Description = updatedProduct.Description;
-            product.Price = updatedProduct.Price;
-            product.Amount = updatedProduct.Amount;
+            product.ProductName = updatedProduct.ProductName;
+            product.ProductDescription = updatedProduct.ProductDescription;
+            product.ProductPrice = updatedProduct.ProductPrice;
+            product.ProductAmount = updatedProduct.ProductAmount;
             return Ok();
         }
         else
@@ -70,7 +70,7 @@ public class TableController : Controller
     [HttpGet("delete-{productId}")]
     public IActionResult DeleteProduct(int productId)
     {
-        var index = _products.FindIndex(p => p.Id == productId);
+        var index = _products.FindIndex(p => p.ProductId == productId);
         _products.RemoveAt(index);
 
         return RedirectToAction("Index");
@@ -88,7 +88,7 @@ public class TableController : Controller
             var price = Math.Round(random.NextDouble() * 100, 2);
             var amount = random.Next(0, 100);
 
-            AddProduct(new Product() { Name = name, Description = description, Price = price, Amount = amount });
+            AddProduct(new Product() { ProductName = name, ProductDescription = description, ProductPrice = price, ProductAmount = amount });
         }
     }
 }

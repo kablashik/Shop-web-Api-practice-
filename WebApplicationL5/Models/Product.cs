@@ -1,11 +1,25 @@
+using System.Text.Json.Serialization;
+using WebApplicationL5.JsonSettings.Converters;
+
 namespace WebApplicationL5.Models;
 
 public class Product
 {
-    public int Id { get; set; }
-    public string? Name { get; set; } 
-    public string? Description { get; set; } 
-    public double Price { get; set; }
-    public int Amount { get; set; }
+    [JsonPropertyName("Id")]
+    public int ProductId { get; set; }
+    
+    
+    [JsonConverter(typeof(StringConverter))]
+    [JsonPropertyName("Name")]
+    public string? ProductName { get; set; } 
+    
+    [JsonPropertyName("Description")]
+    public string? ProductDescription { get; set; } 
+    
+    [JsonPropertyName("Price")]
+    public double ProductPrice { get; set; }
+        
+    [JsonPropertyName("Amount")]
+    public int ProductAmount { get; set; }
     
 }
