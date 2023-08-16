@@ -45,7 +45,7 @@ builder.Services.AddControllersWithViews()
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Table}/{action=Index}/{productId?}");
+            pattern: "{controller=Product}/{action=Index}/{productId?}");
 
         app.Run();
     

@@ -1,7 +1,7 @@
 ﻿@model List<Product>;
 @{
     ViewData["Title"] = "Table Page";
-    Layout = "~/Views/Table/_Layout.cshtml";
+    Layout = "~/Views/Product/_Layout.cshtml";
 }
 
 <div class="text-center">
@@ -13,26 +13,26 @@
                 <th>Название</th>
                 <th>Описание</th>
                 <th>Цена шт.</th>
-                <th>Количество</th>
+                <th>Тип</th>
                 <th>Действие</th>
             </tr>
 
             @foreach (var product in Model)
             {
-                var id = product.ProductId;
+                var id = product.Id;
                 <tr id="row_@id">
-                    <td id="index_@id" style="font-style: italic">@product.ProductId</td>
+                    <td id="index_@id" style="font-style: italic">@product.Id</td>
                     <td>
-                        <div id="name_@id">@product.ProductName</div>
+                        <div id="name_@id">@product.Name</div>
                     </td>
                     <td>
-                        <div id="description_@id">@product.ProductDescription</div>
+                        <div id="description_@id">@product.Description</div>
                     </td>
                     <td>
-                        <div id="price_@id">@product.ProductPrice р.</div>
+                        <div id="price_@id">@product.Price р.</div>
                     </td>
                     <td>
-                        <div id="amount_@id">@product.ProductAmount</div>
+                        <div id="type_@id">@product.Type</div>
                     </td>
                     <td>
                         <button id="create_button_@id" onclick="onCreateClick(@id)">➕</button>
@@ -51,7 +51,7 @@
             Name: '',
             Description: '',
             Price: 0,
-            Amount: 0
+            Type: 0
         };
        
         let response = await fetch('add-product-json', {
@@ -129,7 +129,7 @@
             Name: `${field[0]}`,
             Description: `${field[1]}`,
             Price: parseInt(field[2]),
-            Amount: parseInt(field[3])
+            Type: parseInt(field[3])
         };
     }
     

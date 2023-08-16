@@ -4,7 +4,7 @@ using WebApplicationL5.Models;
 
 namespace WebApplicationL5.Controllers;
 
-public class TableController : Controller
+public class ProductController : Controller
 {
     public static List<Product> _products = new();
     private static int _id;
@@ -32,7 +32,7 @@ public class TableController : Controller
     [HttpPost("add-product")]
     public IActionResult AddProduct([FromForm] [FromBody] Product product)
     {
-        product.ProductId = _id;
+        product.Id = _id;
         _id++;
         _products.Add(product);
 
@@ -42,23 +42,23 @@ public class TableController : Controller
     [HttpPost("add-product-json")]
     public IActionResult AddProductJson([FromBody] Product product)
     {
-        product.ProductId = _id;
+        product.Id = _id;
         _id++;
         _products.Add(product);
 
-        return Ok(new { id = product.ProductId });
+        return Ok(new { id = product.Id });
     }
 
     [HttpPost("update-product-json/{id}")]
     public IActionResult UpdateProductJson(int id, [FromBody] Product updatedProduct)
     {
-        var product = _products.FirstOrDefault(p => p.ProductId == id);
+        var product = _products.FirstOrDefault(p => p.Id == id);
         if (product != null)
         {
-            product.ProductName = updatedProduct.ProductName;
-            product.ProductDescription = updatedProduct.ProductDescription;
-            product.ProductPrice = updatedProduct.ProductPrice;
-            product.ProductAmount = updatedProduct.ProductAmount;
+            product.Name = updatedProduct.Name;
+            product.Description = updatedProduct.Description;
+            product.Price = updatedProduct.Price;
+            product.Type = updatedProduct.Type;
             return Ok();
         }
         else
@@ -70,7 +70,7 @@ public class TableController : Controller
     [HttpGet("delete-{productId}")]
     public IActionResult DeleteProduct(int productId)
     {
-        var index = _products.FindIndex(p => p.ProductId == productId);
+        var index = _products.FindIndex(p => p.Id == productId);
         _products.RemoveAt(index);
 
         return RedirectToAction("Index");
@@ -86,9 +86,9 @@ public class TableController : Controller
             var name = _items[index];
             var description = _descriptions[index];
             var price = Math.Round(random.NextDouble() * 100, 2);
-            var amount = random.Next(0, 100);
+            var type = (ProductType)random.Next(1, 3);
 
-            AddProduct(new Product() { ProductName = name, ProductDescription = description, ProductPrice = price, ProductAmount = amount });
+            AddProduct(new Product() { Name = name, Description = description, Price = price, Type = type });
         }
     }
 }
