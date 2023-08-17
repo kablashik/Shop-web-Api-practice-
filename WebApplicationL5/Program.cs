@@ -18,7 +18,7 @@ builder.Services.AddControllersWithViews()
         options.JsonSerializerOptions.Converters.Add(new DoubleConverter());
     });
 
-        builder.Services.AddSwaggerGen();
+        //builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
 
@@ -30,11 +30,11 @@ builder.Services.AddControllersWithViews()
             app.UseHsts();
         }
 
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+      // if (app.Environment.IsDevelopment())
+      // {
+      //     app.UseSwagger();
+      //     app.UseSwaggerUI();
+      // }
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
