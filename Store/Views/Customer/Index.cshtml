@@ -1,38 +1,38 @@
-﻿@model List<WebApplicationL5.Models.Product>;
+﻿@model List<WebApplicationL5.Models.Customer>;
 @{
     ViewData["Title"] = "Table Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Products</h1>
+    <h1 class="display-4">Customers</h1>
     <div class="myTable">
-        <table id="table_1">
+        <table id="table_2">
             <tr>
                 <th>ID</th>
-                <th>Название</th>
-                <th>Описание</th>
-                <th>Цена шт.</th>
-                <th>Тип</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Возраст</th>
+                <th>Страна</th>
                 <th>Действие</th>
             </tr>
 
-            @foreach (var product in Model)
+            @foreach (var customer in Model)
             {
-                var id = product.Id;
+                var id = customer.Id;
                 <tr id="row_@id">
-                    <td id="index_@id" style="font-style: italic">@product.Id</td>
+                    <td id="index_@id" style="font-style: italic">@customer.Id</td>
                     <td>
-                        <div id="name_@id">@product.Name</div>
+                        <div id="first_name_@id">@customer.FirstName</div>
                     </td>
                     <td>
-                        <div id="description_@id">@product.Description</div>
+                        <div id="last_name_@id">@customer.LastName</div>
                     </td>
                     <td>
-                        <div id="price_@id">@product.Price р.</div>
+                        <div id="age_@id">@customer.Age</div>
                     </td>
                     <td>
-                        <div id="type_@id">@product.Type</div>
+                        <div id="country_@id">@customer.Country</div>
                     </td>
                     <td>
                         <button id="create_button_@id" onclick="onCreateClick(@id)">➕</button>
@@ -47,19 +47,19 @@
 
 <script>
     async function onCreateClick(id) {
-        let product = {
-            Name: 'Unknown',
-            Description: 'Unknown',
-            Price: 0,
-            Type: 0
+        let customer = {
+            FirstName: 'Unknown',
+            LastName: 'Unknown',
+            Age: 0,
+            Country: "Unknown"
         };
        
-        let response = await fetch('add', {
+        let response = await fetch('/Customer/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(product)
+            body: JSON.stringify(customer)
         });
 
         if (response.ok) {
@@ -73,7 +73,7 @@
     }
     
     async function onDeleteClick(id) {
-        let response = await fetch(`delete-${id}`);
+        let response = await fetch(`/Customer/delete-${id}`);
         if (response.ok) {
             let rowToDelete = document.getElementById(`row_${id}`)
             rowToDelete.remove();
@@ -95,7 +95,7 @@
     }
     
     function addRow() {
-        let table = document.getElementById("table_1");
+        let table = document.getElementById("table_2");
         let rows = table.getElementsByTagName("tr");
         let lastRow = rows[rows.length - 1];
 
@@ -106,8 +106,8 @@
         return lastRow;
     }
     
-    async function updateProduct(product, id) {
-    await fetch(`update-${id}`, {
+    async function update(product, id) {
+        await fetch(`/Customer/update-${id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -124,12 +124,12 @@
         cell.querySelector('div').style.display = 'none';
     }
     
-    function createProductFromInput(field) {
+    function createModelFromInput(field) {
         return {
-            Name: `${field[0]}`,
-            Description: `${field[1]}`,
-            Price: parseInt(field[2]),
-            Type: parseInt(field[3])
+            FirstName: `${field[0]}`,
+            LastName: `${field[1]}`,
+            Age: parseInt(field[2]),
+            Country: `${field[3]}`
         };
     }
     
@@ -172,10 +172,10 @@
             element.style.display = '';
         }
 
-        let product = createProductFromInput(fields);
+        let product = createModelFromInput(fields);
 
         if (saveChanges) {
-            updateProduct(product, id);
+            update(product, id);
         }
 
         ReturnEditButtons(id);

@@ -26,18 +26,18 @@ public class ProductController : Controller
         return View(_products);
     }
     
-    [HttpPost("add-product-json")]
-    public IActionResult AddProductJson([FromBody] Product product)
+    [HttpPost("add")]
+    public IActionResult AddProduct([FromBody] Product product)
     {
         product.Id = _id;
         _id++;
         _products.Add(product);
 
-        return Ok(new { id = product.Id });
+        return Ok(new {product.Id });
     }
 
-    [HttpPost("update-product-json/{id}")]
-    public IActionResult UpdateProductJson(int id, [FromBody] Product updatedProduct)
+    [HttpPost("update-{id}")]
+    public IActionResult UpdateProduct(int id, [FromBody] Product updatedProduct)
     {
         var product = _products.FirstOrDefault(p => p.Id == id);
         if (product != null)

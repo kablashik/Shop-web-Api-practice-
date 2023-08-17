@@ -1,22 +1,22 @@
 //using Store.JsonSettings.Converters;
 
-using Store.JsonSettings.Policies;
-using System.Text.Json.Serialization;
-using Store.JsonSettings.Converters;
+//using Store.JsonSettings.Policies;
+//using System.Text.Json.Serialization;
+//using Store.JsonSettings.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews()
-    .AddRazorRuntimeCompilation()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamePolicy();
-        options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString |
-                                                       JsonNumberHandling.AllowNamedFloatingPointLiterals;
-        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-        options.JsonSerializerOptions.Converters.Add(new DoubleConverter());
-    });
+builder.Services.AddControllersWithViews();
+  //.AddRazorRuntimeCompilation()
+  //.AddJsonOptions(options =>
+  //{
+  //    options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamePolicy();
+  //    options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString |
+  //                                                   JsonNumberHandling.AllowNamedFloatingPointLiterals;
+  //    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+  //    options.JsonSerializerOptions.Converters.Add(new DoubleConverter());
+  //});
 
         //builder.Services.AddSwaggerGen();
 
