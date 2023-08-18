@@ -32,7 +32,7 @@
                         <div id="count_@id">@order.Count</div>
                     </td>
                     <td>
-                        <div id="created_at_@id">@order.CreatedAt.ToString("dd-MM-yyyy")</div>
+                        <div id="created_at_@id">@order.CreatedAt.ToString("yyyy-MM-dd")</div>
                     </td>
                     <td>
                         <button id="create_button_@id" onclick="onCreateClick(@id)">➕</button>
@@ -125,11 +125,13 @@
     }
     
     function createModelFromInput(field) {
+        
         return {
             CustomerId: parseInt(field[0]) || 0,
             ProductId: parseInt(field[1]) || 0,
             Count: parseInt(field[2]) || 0,
-            Date: `${field[3]}` 
+            CreatedAt: `${field[3]}` || "0001-01-01"
+            //CreatedAt: "2000-11-10"
         };
     }
     

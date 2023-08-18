@@ -38,20 +38,14 @@ public class OrderController : Controller
     [Route("update-{id}")]
    public IActionResult Update(int id,[FromBody] Order updatedOrder)
    {
-       var order = _orders.FirstOrDefault(o => o.Id == id);
+       var order = _orders.FirstOrDefault(o =>o.Id == id);
        if (order != null)
        {
+            
            order.CustomerId = updatedOrder.CustomerId;
            order.ProductId = updatedOrder.ProductId;
-           order.Count = updatedOrder.Count;
-           //order.CreatedAt = updatedOrder.CreatedAt;
-           order.CreatedAt = new DateTime(1991,03,1);
-           //DateTime dateObject = DateTime.ParseExact(updatedOrder.CreatedAt.ToString(), "dd-MM-yyyy", null);
-           //order.CreatedAt = dateObject;
-               
-           
-           
-            
+           order.Count = updatedOrder.Count; 
+           order.CreatedAt = updatedOrder.CreatedAt;            
            return Ok();
        } 
         
