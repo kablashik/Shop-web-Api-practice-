@@ -43,6 +43,18 @@ public class CustomerController : Controller
         var customer = _customers.FirstOrDefault(c => c.Id == id);
         if (customer != null)
         {
+            var firstName = string.IsNullOrEmpty(updatedCustomer.FirstName)
+                ? customer.FirstName
+                : updatedCustomer.FirstName;
+            
+            var lastName = string.IsNullOrEmpty(updatedCustomer.LastName)
+                ? customer.LastName
+                : updatedCustomer.LastName;
+            
+            var country = string.IsNullOrEmpty(updatedCustomer.Country)
+                ? customer.Country
+                : updatedCustomer.Country;
+            
             customer.FirstName = updatedCustomer.FirstName;
             customer.LastName = updatedCustomer.LastName;
             customer.Age = updatedCustomer.Age;

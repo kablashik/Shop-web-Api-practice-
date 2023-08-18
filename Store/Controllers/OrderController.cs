@@ -46,6 +46,11 @@ public class OrderController : Controller
            order.Count = updatedOrder.Count;
            //order.CreatedAt = updatedOrder.CreatedAt;
            order.CreatedAt = new DateTime(1991,03,1);
+           //DateTime dateObject = DateTime.ParseExact(updatedOrder.CreatedAt.ToString(), "dd-MM-yyyy", null);
+           //order.CreatedAt = dateObject;
+               
+           
+           
             
            return Ok();
        } 

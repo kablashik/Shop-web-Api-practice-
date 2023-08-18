@@ -126,10 +126,10 @@
     
     function createModelFromInput(field) {
         return {
-            CustomerId: parseInt(field[0]),
-            ProductId: parseInt(field[1]),
-            Count: parseInt(field[2]),
-            Date: `${field[3]}`
+            CustomerId: parseInt(field[0]) || 0,
+            ProductId: parseInt(field[1]) || 0,
+            Count: parseInt(field[2]) || 0,
+            Date: `${field[3]}` 
         };
     }
     

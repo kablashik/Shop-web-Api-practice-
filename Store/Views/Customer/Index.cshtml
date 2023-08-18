@@ -126,10 +126,10 @@
     
     function createModelFromInput(field) {
         return {
-            FirstName: `${field[0]}`,
-            LastName: `${field[1]}`,
-            Age: parseInt(field[2]),
-            Country: `${field[3]}`
+            FirstName: `${field[0]}` || "Unknown",
+            LastName: `${field[1]}` || "Unknown",
+            Age: parseInt(field[2]) || 0,
+            Country: `${field[3]}` || "Unknown"
         };
     }
     

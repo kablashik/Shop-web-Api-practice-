@@ -125,11 +125,30 @@
     }
     
     function createProductFromInput(field) {
+        let type;
+        switch (field[3].toLowerCase()) {
+            case "unknown":
+                type = 0;
+                break;
+            case "книга":   
+                type = 1;
+                break;
+            case "диск":   
+                type = 2;
+                break;
+            case "продукт":   
+                type = 3;
+                break;
+            default:
+                type = 0;
+                break;
+        }
+        
         return {
             Name: `${field[0]}`,
             Description: `${field[1]}`,
             Price: parseInt(field[2]),
-            Type: parseInt(field[3])
+            Type: type
         };
     }
     

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationL5.Models;
@@ -42,8 +43,13 @@ public class ProductController : Controller
         var product = _products.FirstOrDefault(p => p.Id == id);
         if (product != null)
         {
-            product.Name = updatedProduct.Name;
-            product.Description = updatedProduct.Description;
+            var name = string.IsNullOrEmpty(updatedProduct.Name) ?
+                product.Name : updatedProduct.Name;
+            var description = string.IsNullOrEmpty(updatedProduct.Description) ?
+                product.Description : updatedProduct.Description;
+            
+            product.Name = name;
+            product.Description = description;
             product.Price = updatedProduct.Price;
             product.Type = updatedProduct.Type;
             
