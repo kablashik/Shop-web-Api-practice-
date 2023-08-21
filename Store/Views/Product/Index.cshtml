@@ -100,6 +100,8 @@
         let lastRow = rows[rows.length - 1];
 
         let duplicateRow = lastRow.cloneNode(true);
+        
+        
         table.appendChild(duplicateRow);
         lastRow = rows[rows.length - 1];
 
@@ -226,6 +228,7 @@
     
         row.id = `row_${id}`;
         let elements = row.getElementsByTagName("*");
+        
         for (let i = 0; i < elements.length; i++) {
             let element = elements[i];
             
@@ -239,9 +242,20 @@
             }
             
             if (element.tagName.toLowerCase() ==="button"){
-                element.setAttribute("onclick", `onEditButton(${id})`);
+                //element.setAttribute("onclick", `onEditButton(${id})`);
                 element.id = changeIdNumericPart(element.id, id);
             }
         }
+        
+      //let rrow = document.getElementById(`row_${id}`);
+
+      //let createButton = rrow.getElementById(`create_button_${id}`);
+      //createButton.setAttribute("onclick", `() => onCreateClick(${id})`);
+      //let editButton = rrow.getElementById(`edit_button_${id}`);
+      //editButton.setAttribute("onclick", `() => onEditClick(${id})`);
+      //
+      //let deleteButton = rrow.getElementById(`delete_button_${id}`);
+      //deleteButton.setAttribute("onclick", `() => onDeleteClick(${id})`);
+
     }        
 </script>

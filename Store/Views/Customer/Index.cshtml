@@ -1,4 +1,4 @@
-﻿@model List<WebApplicationL5.Models.Customer>;
+﻿@model IList<WebApplicationL5.Models.Customer>;
 @{
     ViewData["Title"] = "Table Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -34,7 +34,7 @@
                     <td>
                         <div id="country_@id">@customer.Country</div>
                     </td>
-                    <td>
+                    <td id="buttons_@id">
                         <button id="create_button_@id" onclick="onCreateClick(@id)">➕</button>
                         <button id="edit_button_@id" onclick="onEditClick(@id)">✎</button>
                         <button id="delete_button_@id" onclick="onDeleteClick(@id)">❌</button>
@@ -176,6 +176,7 @@
 
         if (saveChanges) {
             update(product, id);
+            
         }
 
         ReturnEditButtons(id);
@@ -220,7 +221,7 @@
             }
             
             if (element.tagName.toLowerCase() ==="button"){
-                element.setAttribute("onclick", `onEditButton(${id})`);
+                //element.setAttribute("onclick", `onEditButton(${id})`);
                 element.id = changeIdNumericPart(element.id, id);
             }
         }
