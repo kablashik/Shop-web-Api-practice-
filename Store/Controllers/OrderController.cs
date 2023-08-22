@@ -20,6 +20,12 @@ public class OrderController : Controller
         new Order {Id = 9, CustomerId = 6, ProductId = 7, Count = 2, CreatedAt = new DateTime(2023, 05, 2)},
         new Order {Id = 10, CustomerId = 10, ProductId = 10, Count = 3, CreatedAt = new DateTime(2023, 03, 1)},
     };
+
+    [Route("id")]
+    public IActionResult GetCurrentId()
+    {
+        return Content(_id.ToString());
+    }
     public IActionResult Index()
     {
         return View(_orders);
@@ -38,14 +44,18 @@ public class OrderController : Controller
     [Route("update-{id}")]
    public IActionResult Update(int id,[FromBody] Order updatedOrder)
    {
-       var order = _orders.FirstOrDefault(o =>o.Id == id);
+       if (id >= _id)
+       {
+           Add(updatedOrder);
+           return Ok();
+       }
+       var order = _orders.FirstOrDefault(o => o.Id == id);
        if (order != null)
        {
-            
            order.CustomerId = updatedOrder.CustomerId;
            order.ProductId = updatedOrder.ProductId;
-           order.Count = updatedOrder.Count; 
-           order.CreatedAt = updatedOrder.CreatedAt;            
+           order.Count = updatedOrder.Count;
+           order.CreatedAt = new DateTime(1991,03,1);
            return Ok();
        } 
         

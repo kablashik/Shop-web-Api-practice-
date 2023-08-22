@@ -18,11 +18,11 @@ public class AdoConnectedDataContext : IDataContext
     {
         var products = new List<Product>();
 
-        using var connection = new SqlConnection(_connectionString);
+        using var connection = new MySqlConnection(_connectionString);
         connection.Open();
             
         var query = "SELECT Id, Name, Description, Price, Type FROM Products";
-        var command = new SqlCommand(query, connection);
+        var command = new MySqlCommand(query, connection);
 
         using var reader = command.ExecuteReader();
         while (reader.Read())
@@ -44,11 +44,11 @@ public class AdoConnectedDataContext : IDataContext
 
     public int AddProduct(Product product)
     {
-        using var connection = new SqlConnection(_connectionString);
+        using var connection = new MySqlConnection(_connectionString);
         connection.Open();
         
-        var query = "INSERT INTO Products (Name, Description, Price, Type VALUES (@Name, @Description, @Price, @Type)";
-        var command = new SqlCommand(query, connection);
+        var query = "INSERT INTO Products (Name, Description, Price, Type) VALUES (@Name, @Description, @Price, @Type)";
+        var command = new MySqlCommand(query, connection);
 
         command.Parameters.AddWithValue("@Name", product.Name);
         command.Parameters.AddWithValue("@Description", product.Description);
@@ -60,12 +60,12 @@ public class AdoConnectedDataContext : IDataContext
 
     public int UpdateProduct(int id, Product product)
     {
-        using var connection = new SqlConnection(_connectionString);
+        using var connection = new MySqlConnection(_connectionString);
         connection.Open();
 
         var query = 
             "UPDATE Products SET Name = @Name, Description = @Description, Price = @Price, Type = @Type WHERE Id = @Id";
-        var command = new SqlCommand(query, connection);
+        var command = new MySqlCommand(query, connection);
 
         command.Parameters.AddWithValue("Name", product.Name);
         command.Parameters.AddWithValue("Description", product.Description);
@@ -79,11 +79,11 @@ public class AdoConnectedDataContext : IDataContext
 
     public int DeleteProduct(int id)
     {
-        using var connection = new SqlConnection(_connectionString);
+        using var connection = new MySqlConnection(_connectionString);
         connection.Open();
 
         var query = "DELETE FROM Products WHERE Id = @Id";
-        var command = new SqlCommand(query, connection);
+        var command = new MySqlCommand(query, connection);
 
         command.Parameters.AddWithValue("Id", id);
 
@@ -145,6 +145,7 @@ public class AdoConnectedDataContext : IDataContext
         var query =
             "UPDATE Customer SET first_name = @FirstName, last_name = @LastName, age = @Age, country = @Country WHERE id = @Id";
         using var command = new MySqlCommand(query, connection);
+        
         command.Parameters.AddWithValue("FirstName", customer.FirstName);
         command.Parameters.AddWithValue("LastName", customer.LastName);
         command.Parameters.AddWithValue("Age", customer.Age);
@@ -169,21 +170,73 @@ public class AdoConnectedDataContext : IDataContext
 
     public IList<Order> SelectOrders()
     {
-        throw new NotImplementedException();
+        var orders = new List<Order>();
+        using var connection = new MySqlConnection(_connectionString);
+        
+        connection.Open();
+        var query = "SELECT * FROM orders";
+        using var command = new MySqlCommand(query, connection);
+
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            var order = new Order()
+            {
+                Id = (int)reader["id"],
+                CustomerId = (int)reader["customer_id"],
+                ProductId = (int)reader["product_id"],
+                Count = (int)reader["count"],
+                CreatedAt = (DateTime)reader["created_at"]
+            };
+            
+            orders.Add(order);
+        }
+
+        return orders;
     }
 
     public int AddOrder(Order order)
     {
-        throw new NotImplementedException();
+        using var connection = new MySqlConnection(_connectionString);
+        connection.Open();
+        var query = "INSERT INTO orders (customer_id, product_id, count, created_at) VALUES (@CustomerId, @ProductId, @Count, @CreatedAt)";
+
+        using var command = new MySqlCommand(query, connection);
+
+        command.Parameters.AddWithValue("CustomerId", order.CustomerId);
+        command.Parameters.AddWithValue("ProductId", order.ProductId);
+        command.Parameters.AddWithValue("Count", order.Count);
+        command.Parameters.AddWithValue("CreatedAt", order.CreatedAt);
+
+        return command.ExecuteNonQuery();
     }
 
     public int UpdateOrder(int id, Order order)
     {
-        throw new NotImplementedException();
+        using var connection = new MySqlConnection(_connectionString);
+        connection.Open();
+        var query = "UPDATE ORDERS SET customer_id = @CustomerId, product_id = @ProductId, count = @Count, created_at = @CreatedAt WHERE id = @Id";
+
+        using var command = new MySqlCommand(query, connection);
+
+        command.Parameters.AddWithValue("CustomerId", order.CustomerId);
+        command.Parameters.AddWithValue("ProductId", order.ProductId);
+        command.Parameters.AddWithValue("Count", order.Count);
+        command.Parameters.AddWithValue("CreatedAt", order.CreatedAt);
+
+        return command.ExecuteNonQuery();
     }
 
     public int DeleteOrder(int id)
     {
-        throw new NotImplementedException();
+        var connection = new MySqlConnection(_connectionString);
+        connection.Open();
+
+        var query = "DELETE FROM orders WHERE id = @Id";
+        
+        using var command = new MySqlCommand(query, connection);
+        command.Parameters.AddWithValue("Id", id);
+
+        return command.ExecuteNonQuery();
     }
 }

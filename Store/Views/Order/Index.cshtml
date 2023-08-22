@@ -47,28 +47,17 @@
 
 <script>
     async function onCreateClick(id) {
-        let order = {
-            CustomerId: 0,
-            ProductId: 0,
-            Count: 0,
-            Date: "22-22-2222"
-        };
-       
-        let response = await fetch('/Order/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(order)
-        });
-
+        let row = addRow();
+        let orderId;
+        let response = await fetch('/Order/id');
+    
         if (response.ok) {
-            let jsonResponse = await response.json();
-            let id = jsonResponse.id;
-            let row = addRow();
-            changeID(row, id);
-            onEditClick(id);
+            orderId = await response.text();
+            changeID(row, orderId);
+            onEditClick(orderId);
             clearInputsInRow(row);
+        } else {
+            console.error("Произошла ошибка:", response.status);
         }
     }
     
