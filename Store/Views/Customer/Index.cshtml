@@ -47,28 +47,17 @@
 
 <script>
     async function onCreateClick(id) {
-        let customer = {
-            FirstName: 'Unknown',
-            LastName: 'Unknown',
-            Age: 0,
-            Country: "Unknown"
-        };
-       
-        let response = await fetch('/Customer/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(customer)
-        });
-
+        let row = addRow();
+        let customerId;
+        let response = await fetch('/Customer/id');
+    
         if (response.ok) {
-            let jsonResponse = await response.json();
-            let id = jsonResponse.id;
-            let row = addRow();
-            changeID(row, id);
-            onEditClick(id);
+            customerId = await response.text();
+            changeID(row, customerId);
+            onEditClick(customerId);
             clearInputsInRow(row);
+        } else {
+            console.error("Произошла ошибка:", response.status);
         }
     }
     
@@ -176,7 +165,6 @@
 
         if (saveChanges) {
             update(product, id);
-            
         }
 
         ReturnEditButtons(id);

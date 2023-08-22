@@ -1,4 +1,4 @@
-﻿@model List<WebApplicationL5.Models.Product>;
+﻿@model IList<WebApplicationL5.Models.Product>;
 @{
     ViewData["Title"] = "Table Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -47,28 +47,17 @@
 
 <script>
     async function onCreateClick(id) {
-        let product = {
-            Name: 'Unknown',
-            Description: 'Unknown',
-            Price: 0,
-            Type: 0
-        };
-       
-        let response = await fetch('add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(product)
-        });
-
+        let row = addRow();
+        let productId;
+        let response = await fetch('/id');
+    
         if (response.ok) {
-            let jsonResponse = await response.json();
-            let id = jsonResponse.id;
-            let row = addRow();
-            changeID(row, id);
-            onEditClick(id);
+            productId = await response.text();
+            changeID(row, productId);
+            onEditClick(productId);
             clearInputsInRow(row);
+        } else {
+            console.error("Произошла ошибка:", response.status);
         }
     }
     
@@ -128,6 +117,9 @@
     
     function createProductFromInput(field) {
         let type;
+        if (field[3] == null){
+            type = 0
+        }
         switch (field[3].toLowerCase()) {
             case "unknown":
                 type = 0;
@@ -147,9 +139,9 @@
         }
         
         return {
-            Name: `${field[0]}`,
-            Description: `${field[1]}`,
-            Price: parseInt(field[2]),
+            Name: `${field[0]}` || "Unknown",
+            Description: `${field[1]}` || "Unknown",
+            Price: parseInt(field[2]) || 0,
             Type: type
         };
     }

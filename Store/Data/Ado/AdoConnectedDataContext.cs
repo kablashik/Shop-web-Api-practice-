@@ -21,7 +21,7 @@ public class AdoConnectedDataContext : IDataContext
         using var connection = new MySqlConnection(_connectionString);
         connection.Open();
             
-        var query = "SELECT Id, Name, Description, Price, Type FROM Products";
+        var query = "SELECT * FROM Product";
         var command = new MySqlCommand(query, connection);
 
         using var reader = command.ExecuteReader();
@@ -29,11 +29,11 @@ public class AdoConnectedDataContext : IDataContext
         {
             var product = new Product()
             {
-                Id = (int)reader["Id"],
-                Name = reader["Name"] as string,
-                Description = reader["Description"] as string,
-                Price = (double)reader["Price"],
-                Type = (ProductType)Enum.Parse(typeof(ProductType), reader["Type"].ToString())
+                Id = (int)reader["id"],
+                Name = reader["name"] as string,
+                Description = reader["description"] as string,
+                Price = (double)reader["price"],
+                Type = (ProductType)Enum.Parse(typeof(ProductType), reader["product_type"].ToString())
             };
                     
             products.Add(product);
@@ -47,13 +47,13 @@ public class AdoConnectedDataContext : IDataContext
         using var connection = new MySqlConnection(_connectionString);
         connection.Open();
         
-        var query = "INSERT INTO Products (Name, Description, Price, Type) VALUES (@Name, @Description, @Price, @Type)";
+        var query = "INSERT INTO Product (name, description, price, product_type) VALUES (@Name, @Description, @Price, @Type)";
         var command = new MySqlCommand(query, connection);
 
         command.Parameters.AddWithValue("@Name", product.Name);
         command.Parameters.AddWithValue("@Description", product.Description);
         command.Parameters.AddWithValue("@Price", product.Price);
-        command.Parameters.AddWithValue("@Type", product.Type);
+        command.Parameters.AddWithValue("@Type", product.Type.ToString());
 
         return command.ExecuteNonQuery();
     }
@@ -64,7 +64,7 @@ public class AdoConnectedDataContext : IDataContext
         connection.Open();
 
         var query = 
-            "UPDATE Products SET Name = @Name, Description = @Description, Price = @Price, Type = @Type WHERE Id = @Id";
+            "UPDATE Product SET name = @Name, description = @Description, price = @Price, product_type = @Type WHERE Id = @Id";
         var command = new MySqlCommand(query, connection);
 
         command.Parameters.AddWithValue("Name", product.Name);
@@ -82,8 +82,8 @@ public class AdoConnectedDataContext : IDataContext
         using var connection = new MySqlConnection(_connectionString);
         connection.Open();
 
-        var query = "DELETE FROM Products WHERE Id = @Id";
-        var command = new MySqlCommand(query, connection);
+        var query = "DELETE FROM product WHERE Id = @Id";
+        using var command = new MySqlCommand(query, connection);
 
         command.Parameters.AddWithValue("Id", id);
 
@@ -98,7 +98,7 @@ public class AdoConnectedDataContext : IDataContext
         
         connection.Open();
 
-        var query = "SELECT id, first_name, last_name, age, country FROM Customer";
+        var query = "SELECT * FROM Customer";
         using var command = new MySqlCommand(query, connection);
 
         using var reader = command.ExecuteReader();
@@ -223,6 +223,7 @@ public class AdoConnectedDataContext : IDataContext
         command.Parameters.AddWithValue("ProductId", order.ProductId);
         command.Parameters.AddWithValue("Count", order.Count);
         command.Parameters.AddWithValue("CreatedAt", order.CreatedAt);
+        command.Parameters.AddWithValue("Id", id);
 
         return command.ExecuteNonQuery();
     }

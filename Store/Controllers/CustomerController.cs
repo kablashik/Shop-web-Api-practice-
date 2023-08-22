@@ -7,10 +7,10 @@ namespace WebApplicationL5.Controllers;
 [Route("Customer")]
 public class CustomerController : Controller
 {
-    static readonly string _connectionString = "Server=localhost;Database=usersdb;Uid=root;Pwd=aaa;";
+    static readonly string _connectionString = "Server=localhost;Database=usersdb;Uid=root;Pwd=3079718;";
     private AdoConnectedDataContext _dataContext = new AdoConnectedDataContext(_connectionString);
     
-    private static int Id = 11;
+    private static int _id = 11;
 
    //private static List<Customer> _customers = new()
    //{
@@ -31,11 +31,17 @@ public class CustomerController : Controller
         return View(_dataContext.SelectCustomers());
     }
 
+    [Route("id")]
+    public IActionResult GetCurrentId()
+    {
+        return Content(_id.ToString());
+    }
+
     [Route("add")]
     public IActionResult Add([FromBody] Customer customer)
     {
-        customer.Id = Id;
-        Id++;
+        customer.Id = _id;
+        _id++;
         //_customers.Add(customer);
         _dataContext.AddCustomer(customer);
 
@@ -45,8 +51,13 @@ public class CustomerController : Controller
     [Route("update-{id}")]
     public IActionResult Update(int id, [FromBody] Customer updatedCustomer)
     {
+        if (id >= _id)
+        {
+            Add(updatedCustomer);
+            return Ok();
+        }
+        
         _dataContext.UpdateCustomer(id, updatedCustomer);
-
         return Ok();
         
         //var customer = _customers.FirstOrDefault(c => c.Id == id);
