@@ -87,8 +87,22 @@ public class AdoConnectedDataContext : IDataContext
 
         command.Parameters.AddWithValue("Id", id);
 
-        return command.ExecuteNonQuery();
+        var result = command.ExecuteScalar();
+        return Convert.ToInt32(result);
     }
+    public int GetProductId()
+    {
+        using var connection = new MySqlConnection(_connectionString);
+        connection.Open();
+
+        var query = "SELECT MAX(id) FROM product";
+
+        using var command = new MySqlCommand(query, connection);
+
+        var result = command.ExecuteScalar();
+        return Convert.ToInt32(result);
+    }
+
 
     public IList<Customer> SelectCustomers()
     {
@@ -150,7 +164,7 @@ public class AdoConnectedDataContext : IDataContext
         command.Parameters.AddWithValue("LastName", customer.LastName);
         command.Parameters.AddWithValue("Age", customer.Age);
         command.Parameters.AddWithValue("Country", customer.Country);
-        command.Parameters.AddWithValue("Id", customer.Id);
+        command.Parameters.AddWithValue("Id", id);
 
         return command.ExecuteNonQuery();
     }
@@ -165,8 +179,22 @@ public class AdoConnectedDataContext : IDataContext
 
         command.Parameters.AddWithValue("Id", id);
 
-        return command.ExecuteNonQuery();
+        var result = command.ExecuteScalar();
+        return Convert.ToInt32(result);
     }
+    public int GetCustomerId()
+    {
+        using var connection = new MySqlConnection(_connectionString);
+        connection.Open();
+
+        var query = "SELECT MAX(id) FROM customer";
+
+        using var command = new MySqlCommand(query, connection);
+
+        var result = command.ExecuteScalar();
+        return Convert.ToInt32(result);
+    }
+
 
     public IList<Order> SelectOrders()
     {
@@ -230,7 +258,7 @@ public class AdoConnectedDataContext : IDataContext
 
     public int DeleteOrder(int id)
     {
-        var connection = new MySqlConnection(_connectionString);
+        using var connection = new MySqlConnection(_connectionString);
         connection.Open();
 
         var query = "DELETE FROM orders WHERE id = @Id";
@@ -238,6 +266,20 @@ public class AdoConnectedDataContext : IDataContext
         using var command = new MySqlCommand(query, connection);
         command.Parameters.AddWithValue("Id", id);
 
-        return command.ExecuteNonQuery();
+        var result = command.ExecuteScalar();
+        return Convert.ToInt32(result);
+    }
+
+    public int GetOrderId()
+    {
+        using var connection = new MySqlConnection(_connectionString);
+        connection.Open();
+
+        var query = "SELECT MAX(id) FROM orders";
+
+        using var command = new MySqlCommand(query, connection);
+
+        var result = command.ExecuteScalar();
+        return Convert.ToInt32(result);
     }
 }

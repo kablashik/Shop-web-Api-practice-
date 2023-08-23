@@ -10,24 +10,12 @@ public class CustomerController : Controller
     static readonly string _connectionString = "Server=localhost;Database=usersdb;Uid=root;Pwd=3079718;";
     private AdoConnectedDataContext _dataContext = new AdoConnectedDataContext(_connectionString);
     
-    private static int _id = 11;
+    private static int _id;
 
-   //private static List<Customer> _customers = new()
-   //{
-   //    new Customer { Id = 1, FirstName = "Иван", LastName = "Петров", Age = 22, Country = "Россия" },
-   //    new Customer { Id = 2, FirstName = "Елена", LastName = "Сидорова", Age = 30, Country = "Украина" },
-   //    new Customer { Id = 3, FirstName = "Алексей", LastName = "Иванов", Age = 28, Country = "Канада" },
-   //    new Customer { Id = 4, FirstName = "Мария", LastName = "Смирнова", Age = 25, Country = "Казахстан" },
-   //    new Customer { Id = 5, FirstName = "Андрей", LastName = "Козлов", Age = 40, Country = "Россия" },
-   //    new Customer { Id = 6, FirstName = "Ольга", LastName = "Морозова", Age = 35, Country = "Украина" },
-   //    new Customer { Id = 7, FirstName = "Дмитрий", LastName = "Лебедев", Age = 29, Country = "США" },
-   //    new Customer { Id = 8, FirstName = "Екатерина", LastName = "Соколова", Age = 27, Country = "Румыния" },
-   //    new Customer { Id = 9, FirstName = "Сергей", LastName = "Новиков", Age = 33, Country = "Беларусь" },
-   //    new Customer { Id = 10, FirstName = "Анна", LastName = "Зайцева", Age = 31, Country = "Польша" }
-   //};
 
     public IActionResult Index()
     {
+        _id = _dataContext.GetCustomerId() + 1;
         return View(_dataContext.SelectCustomers());
     }
 
@@ -40,12 +28,11 @@ public class CustomerController : Controller
     [Route("add")]
     public IActionResult Add([FromBody] Customer customer)
     {
-        customer.Id = _id;
-        _id++;
-        //_customers.Add(customer);
         _dataContext.AddCustomer(customer);
 
-        return Ok(new { id = customer.Id });
+        _id = customer.Id;
+
+        return Ok(new {customer.Id });
     }
 
     [Route("update-{id}")]
@@ -56,43 +43,15 @@ public class CustomerController : Controller
             Add(updatedCustomer);
             return Ok();
         }
-        
+
         _dataContext.UpdateCustomer(id, updatedCustomer);
         return Ok();
         
-        //var customer = _customers.FirstOrDefault(c => c.Id == id);
-
-       //if (customer != null)
-       //{
-       //    var firstName = string.IsNullOrEmpty(updatedCustomer.FirstName)
-       //        ? customer.FirstName
-       //        : updatedCustomer.FirstName;
-       //    
-       //    var lastName = string.IsNullOrEmpty(updatedCustomer.LastName)
-       //        ? customer.LastName
-       //        : updatedCustomer.LastName;
-       //    
-       //    var country = string.IsNullOrEmpty(updatedCustomer.Country)
-       //        ? customer.Country
-       //        : updatedCustomer.Country;
-       //    
-       //    customer.FirstName = updatedCustomer.FirstName;
-       //    customer.LastName = updatedCustomer.LastName;
-       //    customer.Age = updatedCustomer.Age;
-       //    customer.Country = updatedCustomer.Country;
-       //    
-       //    return Ok();
-       //} 
-       //
-       //return NotFound();
     }
     
     [HttpGet("delete-{id}")]
     public IActionResult Delete(int id)
     {
-       // var index = _customers.FindIndex(p => p.Id == id);
-       // _customers.RemoveAt(index);
-
         _dataContext.DeleteCustomer(id);
 
         return RedirectToAction("Index");

@@ -117,7 +117,7 @@
     
     function createProductFromInput(field) {
         let type;
-        if (field[3] == null){
+        if (field[3] === undefined){
             type = 0
         }
         switch (field[3].toLowerCase()) {
