@@ -96,7 +96,8 @@
     }
     
     async function update(order, id) {
-        await fetch(`/Order/update-${id}`, {
+        order.ID = id;
+        await fetch(`/Order/update`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

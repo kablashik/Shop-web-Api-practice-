@@ -21,7 +21,7 @@ public class AdoConnectedDataContext : IDataContext
         using var connection = new MySqlConnection(_connectionString);
         connection.Open();
             
-        var query = "SELECT * FROM Product";
+        var query = "SELECT * FROM Products";
         var command = new MySqlCommand(query, connection);
 
         using var reader = command.ExecuteReader();
@@ -47,7 +47,7 @@ public class AdoConnectedDataContext : IDataContext
         using var connection = new MySqlConnection(_connectionString);
         connection.Open();
         
-        var query = "INSERT INTO Product (name, description, price, product_type) VALUES (@Name, @Description, @Price, @Type)";
+        var query = "INSERT INTO Products (name, description, price, product_type) VALUES (@Name, @Description, @Price, @Type)";
         var command = new MySqlCommand(query, connection);
 
         command.Parameters.AddWithValue("@Name", product.Name);
@@ -58,20 +58,20 @@ public class AdoConnectedDataContext : IDataContext
         return command.ExecuteNonQuery();
     }
 
-    public int UpdateProduct(int id, Product product)
+    public int UpdateProduct(Product product)
     {
         using var connection = new MySqlConnection(_connectionString);
         connection.Open();
 
         var query = 
-            "UPDATE Product SET name = @Name, description = @Description, price = @Price, product_type = @Type WHERE Id = @Id";
+            "UPDATE Products SET name = @Name, description = @Description, price = @Price, product_type = @Type WHERE Id = @Id";
         var command = new MySqlCommand(query, connection);
 
         command.Parameters.AddWithValue("Name", product.Name);
         command.Parameters.AddWithValue("Description", product.Description);
         command.Parameters.AddWithValue("Price", product.Price);
         command.Parameters.AddWithValue("Type", product.Type);
-        command.Parameters.AddWithValue("Id", id);
+        command.Parameters.AddWithValue("Id", product.Id);
 
 
         return command.ExecuteNonQuery();
@@ -82,7 +82,7 @@ public class AdoConnectedDataContext : IDataContext
         using var connection = new MySqlConnection(_connectionString);
         connection.Open();
 
-        var query = "DELETE FROM product WHERE Id = @Id";
+        var query = "DELETE FROM products WHERE Id = @Id";
         using var command = new MySqlCommand(query, connection);
 
         command.Parameters.AddWithValue("Id", id);
@@ -90,12 +90,25 @@ public class AdoConnectedDataContext : IDataContext
         var result = command.ExecuteScalar();
         return Convert.ToInt32(result);
     }
+
+    public int ProductsRowsCount()
+    {
+        using var connection = new MySqlConnection(_connectionString);
+        connection.Open();
+
+        var query = "SELECT COUNT(*) FROM products";
+        using var command = new MySqlCommand(query, connection);
+
+        var result = command.ExecuteScalar();
+
+        return Convert.ToInt32(result);
+    }
     public int GetProductId()
     {
         using var connection = new MySqlConnection(_connectionString);
         connection.Open();
 
-        var query = "SELECT MAX(id) FROM product";
+        var query = "SELECT MAX(id) FROM products";
 
         using var command = new MySqlCommand(query, connection);
 
@@ -112,7 +125,7 @@ public class AdoConnectedDataContext : IDataContext
         
         connection.Open();
 
-        var query = "SELECT * FROM Customer";
+        var query = "SELECT * FROM Customers";
         using var command = new MySqlCommand(query, connection);
 
         using var reader = command.ExecuteReader();
@@ -140,7 +153,7 @@ public class AdoConnectedDataContext : IDataContext
         connection.Open();
 
         var query =
-            "INSERT INTO Customer (first_name, last_name, age, country) VALUES (@FirstName, @LastName, @Age, @Country)";
+            "INSERT INTO Customers (first_name, last_name, age, country) VALUES (@FirstName, @LastName, @Age, @Country)";
         using var command = new MySqlCommand(query, connection);
 
         command.Parameters.AddWithValue("FirstName", customer.FirstName);
@@ -151,20 +164,20 @@ public class AdoConnectedDataContext : IDataContext
         return command.ExecuteNonQuery();
     }
 
-    public int UpdateCustomer(int id, Customer customer)
+    public int UpdateCustomer(Customer customer)
     {
         using var connection = new MySqlConnection(_connectionString);
         connection.Open();
 
         var query =
-            "UPDATE Customer SET first_name = @FirstName, last_name = @LastName, age = @Age, country = @Country WHERE id = @Id";
+            "UPDATE Customers SET first_name = @FirstName, last_name = @LastName, age = @Age, country = @Country WHERE id = @Id";
         using var command = new MySqlCommand(query, connection);
         
         command.Parameters.AddWithValue("FirstName", customer.FirstName);
         command.Parameters.AddWithValue("LastName", customer.LastName);
         command.Parameters.AddWithValue("Age", customer.Age);
         command.Parameters.AddWithValue("Country", customer.Country);
-        command.Parameters.AddWithValue("Id", id);
+        command.Parameters.AddWithValue("Id", customer.Id);
 
         return command.ExecuteNonQuery();
     }
@@ -174,7 +187,7 @@ public class AdoConnectedDataContext : IDataContext
         using var connection = new MySqlConnection(_connectionString);
         connection.Open();
 
-        var query = "DELETE FROM customer WHERE id = @Id";
+        var query = "DELETE FROM customers WHERE id = @Id";
         using var command = new MySqlCommand(query, connection);
 
         command.Parameters.AddWithValue("Id", id);
@@ -182,12 +195,26 @@ public class AdoConnectedDataContext : IDataContext
         var result = command.ExecuteScalar();
         return Convert.ToInt32(result);
     }
+
+    public int CustomersRowsCount()
+    {
+        using var connection = new MySqlConnection(_connectionString);
+        connection.Open();
+
+        var query = "SELECT COUNT(*) FROM customers";
+        using var command = new MySqlCommand(query, connection);
+
+        var result = command.ExecuteScalar();
+
+        return Convert.ToInt32(result);
+    }
+
     public int GetCustomerId()
     {
         using var connection = new MySqlConnection(_connectionString);
         connection.Open();
 
-        var query = "SELECT MAX(id) FROM customer";
+        var query = "SELECT MAX(id) FROM customers";
 
         using var command = new MySqlCommand(query, connection);
 
@@ -239,7 +266,7 @@ public class AdoConnectedDataContext : IDataContext
         return command.ExecuteNonQuery();
     }
 
-    public int UpdateOrder(int id, Order order)
+    public int UpdateOrder(Order order)
     {
         using var connection = new MySqlConnection(_connectionString);
         connection.Open();
@@ -251,7 +278,7 @@ public class AdoConnectedDataContext : IDataContext
         command.Parameters.AddWithValue("ProductId", order.ProductId);
         command.Parameters.AddWithValue("Count", order.Count);
         command.Parameters.AddWithValue("CreatedAt", order.CreatedAt);
-        command.Parameters.AddWithValue("Id", id);
+        command.Parameters.AddWithValue("Id", order.Id);
 
         return command.ExecuteNonQuery();
     }
@@ -267,6 +294,19 @@ public class AdoConnectedDataContext : IDataContext
         command.Parameters.AddWithValue("Id", id);
 
         var result = command.ExecuteScalar();
+        return Convert.ToInt32(result);
+    }
+
+    public int OrdersRowsCount()
+    {
+        using var connection = new MySqlConnection(_connectionString);
+        connection.Open();
+
+        var query = "SELECT COUNT(*) FROM orders";
+        using var command = new MySqlCommand(query, connection);
+
+        var result = command.ExecuteScalar();
+
         return Convert.ToInt32(result);
     }
 

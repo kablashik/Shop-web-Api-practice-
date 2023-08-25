@@ -35,16 +35,16 @@ public class ProductController : Controller
         return Ok(new { product.Id });
     }
 
-    [HttpPost("update-{id}")]
-    public IActionResult UpdateProduct(int id, [FromBody] Product updatedProduct)
+    [HttpPost("update")]
+    public IActionResult UpdateProduct([FromBody] Product updatedProduct)
     {
-        if (id >= _id)
+        if (updatedProduct.Id >= _id)
         {
             AddProduct(updatedProduct);
             return Ok();
         }
 
-        _dataContext.UpdateProduct(id, updatedProduct);
+        _dataContext.UpdateProduct(updatedProduct);
 
         return Ok();
     }
@@ -55,5 +55,13 @@ public class ProductController : Controller
         _dataContext.DeleteProduct(id);
 
         return RedirectToAction("Index");
+    }
+
+    [Route("rows-count")]
+    public IActionResult GetRowsCount()
+    {
+        var rows = _dataContext.ProductsRowsCount();
+
+        return Ok(rows);
     }
 }
