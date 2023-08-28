@@ -8,7 +8,7 @@ namespace WebApplicationL5.Controllers;
 public class ProductController : Controller
 {
     private const string ConnectionString = "Server=localhost;Database=usersdb;Uid=root;Pwd=3079718;";
-    private readonly AdoConnectedDataContext _dataContext = new AdoConnectedDataContext(ConnectionString);
+    private readonly AdoConnectedDataContext _dataContext = new(ConnectionString);
 
     private static int _id;
 
@@ -24,27 +24,27 @@ public class ProductController : Controller
     {
         return Content(_id.ToString());
     }
-    
+
 
     [HttpPost("add")]
-    public IActionResult AddProduct([FromBody] Product product)
+    public IActionResult AddProduct([FromBody] ProductModel productModel)
     {
-        _dataContext.AddProduct(product);
-        _id = product.Id;
+        _dataContext.AddProduct(productModel);
+        _id = productModel.Id;
 
-        return Ok(new { product.Id });
+        return Ok(new { productModel.Id });
     }
 
     [HttpPost("update")]
-    public IActionResult UpdateProduct([FromBody] Product updatedProduct)
+    public IActionResult UpdateProduct([FromBody] ProductModel updatedProductModel)
     {
-        if (updatedProduct.Id >= _id)
+        if (updatedProductModel.Id >= _id)
         {
-            AddProduct(updatedProduct);
+            AddProduct(updatedProductModel);
             return Ok();
         }
 
-        _dataContext.UpdateProduct(updatedProduct);
+        _dataContext.UpdateProduct(updatedProductModel);
 
         return Ok();
     }

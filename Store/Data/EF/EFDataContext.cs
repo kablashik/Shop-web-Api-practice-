@@ -1,24 +1,30 @@
 using Microsoft.EntityFrameworkCore;
+using WebApplicationL5.Data.Models;
+using WebApplicationL5.ModelMappers;
 using WebApplicationL5.Models;
 
 namespace WebApplicationL5.Data.EF;
 
 public class EFDataContext : DbContext, IDataContext
 {
-    public DbSet<Customer> Customers { get; set; }
-    public DbSet<Order> Orders { get; set; }
+    private DbSet<Customer> _customers { get; set; }
+    private DbSet<Order> Orders { get; set; }
 
-    public IList<Product> SelectProducts()
+    private ICustomerModelMapper _customerModelMapper = new CustomerModelMapper();
+    private IOrderModelMapper _orderModelMapper = new OrderModelMapper();
+    private IProductModelMapper _productModelMapper = new ProductModelMapper();
+
+    public IList<ProductModel> SelectProducts()
     {
         throw new NotImplementedException();
     }
 
-    public int AddProduct(Product product)
+    public int AddProduct(ProductModel productModel)
     {
         throw new NotImplementedException();
     }
 
-    public int UpdateProduct(Product product)
+    public int UpdateProduct(ProductModel productModel)
     {
         throw new NotImplementedException();
     }
@@ -33,22 +39,23 @@ public class EFDataContext : DbContext, IDataContext
         throw new NotImplementedException();
     }
 
-
-    public IList<Customer> SelectCustomers()
+    public IList<CustomerModel> SelectCustomers()
     {
-        return Customers.ToList();
+        var result = _customers.Select(customer => _customerModelMapper.MapToModel(customer)).ToList();
+
+        return result;
     }
 
     public int AddCustomer(Customer customer)
     {
-        Customers.Add(customer);
+        _customers.Add(customer);
 
         return SaveChanges();
     }
 
     public int UpdateCustomer(Customer customer)
     {
-        var foundCustomer = Customers.Find(customer.Id);
+        var foundCustomer = _customers.Find(customer.Id);
         if (foundCustomer == null) return 0;
 
         foundCustomer.FirstName = customer.FirstName;
@@ -61,9 +68,9 @@ public class EFDataContext : DbContext, IDataContext
 
     public int DeleteCustomer(int id)
     {
-        var foundCustomer = Customers.FirstOrDefault(row => row.Id == id);
+        var foundCustomer = _customers.FirstOrDefault(row => row.Id == id);
 
-        if (foundCustomer != null) Customers.Remove(foundCustomer);
+        if (foundCustomer != null) _customers.Remove(foundCustomer);
 
         return SaveChanges();
     }
@@ -75,32 +82,31 @@ public class EFDataContext : DbContext, IDataContext
 
     public int GetCustomerId()
     {
-        var maxCustomerId = Customers.Max(customer => customer.Id);
+        var maxCustomerId = _customers.Max(customer => customer.Id);
         return maxCustomerId;
     }
 
-
-    public IList<Order> SelectOrders()
+    public IList<OrderModel> SelectOrders()
     {
-        return Orders.ToList();
+        return Orders.Select(order => _orderModelMapper.MapToModel(order)).ToList();
     }
 
-    public int AddOrder(Order order)
+    public int AddOrder(Order orderModel)
     {
-        Orders.Add(order);
+        Orders.Add(orderModel);
 
         return SaveChanges();
     }
 
-    public int UpdateOrder(Order order)
+    public int UpdateOrder(Order orderModel)
     {
-        var foundOrder = Orders.Find(order.Id);
+        var foundOrder = Orders.Find(orderModel.Id);
         if (foundOrder == null) return 0;
 
-        foundOrder.CustomerId = order.CustomerId;
-        foundOrder.ProductId = order.ProductId;
-        foundOrder.Count = order.Count;
-        foundOrder.CreatedAt = order.CreatedAt;
+        foundOrder.CustomerId = orderModel.CustomerId;
+        foundOrder.ProductId = orderModel.ProductId;
+        foundOrder.Count = orderModel.Count;
+        foundOrder.CreatedAt = orderModel.CreatedAt;
 
         return SaveChanges();
     }
@@ -135,6 +141,8 @@ public class EFDataContext : DbContext, IDataContext
         modelBuilder.Entity<Order>().Property(p => p.CustomerId).HasColumnName("customer_id");
         modelBuilder.Entity<Order>().Property(p => p.ProductId).HasColumnName("product_id");
         modelBuilder.Entity<Order>().Property(p => p.CreatedAt).HasColumnName("created_at");
+
+        modelBuilder.Entity<Product>().Property(p => p.Type).HasColumnName("product_type");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

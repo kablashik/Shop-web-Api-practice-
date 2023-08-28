@@ -1,4 +1,4 @@
-﻿@model IList<WebApplicationL5.Models.Product>;
+﻿@model IList<WebApplicationL5.Models.ProductModel>;
 @{
     ViewData["Title"] = "Table Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -32,7 +32,7 @@
                         <div id="price_@id">@product.Price р.</div>
                     </td>
                     <td>
-                        <div id="type_@id">@product.Type</div>
+                        <div id="type_@id">@product.TypeModel</div>
                     </td>
                     <td>
                         <button id="create_button_@id" onclick="onCreateClick(@id)">➕</button>
@@ -98,7 +98,7 @@
     }
     
     async function updateProduct(product, id) {
-    product.ID = id;    
+    product.ID = id;
     await fetch(`update`, {
         method: 'POST',
         headers: {
@@ -118,9 +118,10 @@
     
     function createProductFromInput(field) {
         let type;
-        if (field[3] === undefined){
-            type = 0
-        }
+        
+      if (field[3] === undefined){
+          field[3] = 0
+      }
         switch (field[3].toLowerCase()) {
             case "unknown":
                 type = 0;
@@ -143,7 +144,7 @@
             Name: `${field[0]}` || "Unknown",
             Description: `${field[1]}` || "Unknown",
             Price: parseInt(field[2]) || 0,
-            Type: type
+            TypeModel: type
         };
     }
     

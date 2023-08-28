@@ -1,6 +1,6 @@
 namespace WebApplicationL5.Models;
 
-public class Customer
+public class CustomerModel
 {
     public int Id { get; set; }
     public string? FirstName { get; set; }

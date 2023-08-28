@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationL5.Data;
 using WebApplicationL5.Data.EF;
+using WebApplicationL5.ModelMappers;
 using WebApplicationL5.Models;
 
 namespace WebApplicationL5.Controllers;
@@ -8,18 +9,14 @@ namespace WebApplicationL5.Controllers;
 [Route("Customer")]
 public class CustomerController : Controller
 {
-    //static readonly string _connectionString = "Server=localhost;Database=usersdb;Uid=root;Pwd=3079718;";
-    //private AdoConnectedDataContext _dataContext = new AdoConnectedDataContext(_connectionString);
-    private EFDataContext _efDataContext = new EFDataContext();
-    
+    private EFDataContext _efDataContext = new();
+    private ICustomerModelMapper _customerModelMapper = new CustomerModelMapper();
     private static int _id;
 
 
     public IActionResult Index()
     {
-        //_id = _dataContext.GetCustomerId() + 1;
         _id = _efDataContext.GetCustomerId() + 1;
-        //return View(_dataContext.SelectCustomers());
         return View(_efDataContext.SelectCustomers());
     }
 
@@ -30,35 +27,34 @@ public class CustomerController : Controller
     }
 
     [Route("add")]
-    public IActionResult Add([FromBody] Customer customer)
+    public IActionResult Add([FromBody] CustomerModel customer)
     {
-        //_dataContext.AddCustomer(customer);
-        _efDataContext.AddCustomer(customer);
+        var dbCustomer = _customerModelMapper.MapFromModel(customer);
+        _efDataContext.AddCustomer(dbCustomer);
 
         _id = customer.Id;
 
-        return Ok(new {customer.Id });
+        return Ok(new { customer.Id });
     }
 
     [Route("update")]
-    public IActionResult Update([FromBody] Customer updatedCustomer)
+    public IActionResult Update([FromBody] CustomerModel updatedCustomer)
     {
         if (updatedCustomer.Id >= _id)
         {
             Add(updatedCustomer);
             return Ok();
         }
-        
-        //_dataContext.UpdateCustomer(updatedCustomer);
-        _efDataContext.UpdateCustomer(updatedCustomer);
+
+        var dbCustomer = _customerModelMapper.MapFromModel(updatedCustomer);
+        _efDataContext.UpdateCustomer(dbCustomer);
+
         return Ok();
-        
     }
-    
+
     [HttpGet("delete-{id}")]
     public IActionResult Delete(int id)
     {
-        //_dataContext.DeleteCustomer(id);
         _efDataContext.DeleteCustomer(id);
 
         return RedirectToAction("Index");
@@ -67,9 +63,8 @@ public class CustomerController : Controller
     [Route("rows-count")]
     public IActionResult GetRowCount()
     {
-        //var rows = _dataContext.CustomersRowsCount();
         var rows = _efDataContext.CustomersRowsCount();
-        
+
         return Ok(rows);
     }
 }

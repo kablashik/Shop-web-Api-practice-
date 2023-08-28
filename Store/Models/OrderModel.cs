@@ -1,6 +1,6 @@
 namespace WebApplicationL5.Models;
 
-public class Order
+public class OrderModel
 {
     public int Id { get; set; }
     public int CustomerId { get; set; }

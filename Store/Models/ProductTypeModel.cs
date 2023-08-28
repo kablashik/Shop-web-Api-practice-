@@ -1,6 +1,6 @@
 namespace WebApplicationL5.Models;
 
-public enum ProductType
+public enum ProductTypeModel
 {
     Unknown = 0,
     Книга,
