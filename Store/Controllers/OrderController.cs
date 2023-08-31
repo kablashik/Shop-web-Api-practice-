@@ -9,8 +9,8 @@ namespace WebApplicationL5.Controllers;
 [Route("Order")]
 public class OrderController : Controller
 {
-    private EFDataContext _efDataContext = new EFDataContext();
-    private IOrderModelMapper _orderModelMapper = new OrderModelMapper();
+    private EFDataContext _efDataContext = EFDataContext.GetContext();
+    private IOrderModelMapper _orderModelMapper = OrderModelMapper.GetMapper();
 
     private static int _id;
 

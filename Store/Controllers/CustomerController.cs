@@ -9,8 +9,8 @@ namespace WebApplicationL5.Controllers;
 [Route("Customer")]
 public class CustomerController : Controller
 {
-    private EFDataContext _efDataContext = new();
-    private ICustomerModelMapper _customerModelMapper = new CustomerModelMapper();
+    readonly EFDataContext _efDataContext = EFDataContext.GetContext();
+    readonly ICustomerModelMapper _customerModelMapper = CustomerModelMapper.GetMapper();
     private static int _id;
 
 

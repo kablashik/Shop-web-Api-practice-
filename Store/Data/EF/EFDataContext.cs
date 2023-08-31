@@ -7,18 +7,28 @@ namespace WebApplicationL5.Data.EF;
 
 public class EFDataContext : DbContext, IDataContext
 {
-    public EFDataContext()
+    private static EFDataContext _dataContext;
+    private EFDataContext()
     {
         //Database.EnsureDeleted();
 
         Database.EnsureCreated();
     }
+
+    public static EFDataContext GetContext()
+    {
+        if (_dataContext == null)
+        {
+            _dataContext = new EFDataContext();
+        }
+        return _dataContext;
+    }
     private DbSet<Customer> _customers { get; set; }
     private DbSet<Order> Orders { get; set; }
 
-    private ICustomerModelMapper _customerModelMapper = new CustomerModelMapper();
-    private IOrderModelMapper _orderModelMapper = new OrderModelMapper();
-    private IProductModelMapper _productModelMapper = new ProductModelMapper();
+    private ICustomerModelMapper _customerModelMapper =  CustomerModelMapper.GetMapper();
+    private IOrderModelMapper _orderModelMapper = OrderModelMapper.GetMapper();
+    private IProductModelMapper _productModelMapper = ProductModelMapper.GetModel();
 
     public IList<ProductModel> SelectProducts()
     {
@@ -147,7 +157,7 @@ public class EFDataContext : DbContext, IDataContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        //optionsBuilder.UseMySQL("Datasource=localhost;Database=usersdb;User=root;Password=3079718;");
-        optionsBuilder.UseMySQL("Datasource=localhost;Database=usersdb3;User=root;Password=3079718;");
+        optionsBuilder.UseMySQL("Datasource=localhost;Database=usersdb;User=root;Password=3079718;");
+        //optionsBuilder.UseMySQL("Datasource=localhost;Database=usersdb3;User=root;Password=3079718;");
     }
 }
