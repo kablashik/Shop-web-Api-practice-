@@ -5,6 +5,19 @@ namespace WebApplicationL5.ModelMappers;
 
 public class CustomerModelMapper : ICustomerModelMapper
 {
+    private static CustomerModelMapper _modelMapper;
+    private CustomerModelMapper()
+    {
+    }
+
+    public static CustomerModelMapper GetMapper()
+    {
+        if (_modelMapper == null)
+        {
+            _modelMapper = new CustomerModelMapper();
+        }
+        return _modelMapper;
+    }
     public Customer MapFromModel(CustomerModel model)
     {
         return new Customer()

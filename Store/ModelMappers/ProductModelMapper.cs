@@ -5,6 +5,21 @@ namespace WebApplicationL5.ModelMappers;
 
 public class ProductModelMapper: IProductModelMapper
 {
+    private static ProductModelMapper _modelMapper;
+
+    private ProductModelMapper()
+    {
+    }
+
+    public static ProductModelMapper GetModel()
+    {
+        if (_modelMapper == null)
+        {
+            _modelMapper = new ProductModelMapper();
+        }
+
+        return _modelMapper;
+    }
     public Product MapFromModel(ProductModel source)
     {
         return new Product()
