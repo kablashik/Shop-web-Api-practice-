@@ -147,7 +147,7 @@ public class EFDataContext : DbContext, IDataContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        //optionsBuilder.UseMySQL("Datasource=localhost;Database=usersdb;User=root;Password=3079718;");
-        optionsBuilder.UseMySQL("Datasource=localhost;Database=usersdb3;User=root;Password=3079718;");
+        optionsBuilder.UseMySQL("Datasource=localhost;Database=usersdb;User=root;Password=3079718;");
+        //optionsBuilder.UseMySQL("Datasource=localhost;Database=usersdb3;User=root;Password=3079718;");
     }
 }

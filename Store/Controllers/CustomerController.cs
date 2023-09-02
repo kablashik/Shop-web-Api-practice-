@@ -9,11 +9,16 @@ namespace WebApplicationL5.Controllers;
 [Route("Customer")]
 public class CustomerController : Controller
 {
-    private EFDataContext _efDataContext = new();
-    private ICustomerModelMapper _customerModelMapper = new CustomerModelMapper();
+    private readonly EFDataContext _efDataContext;
+    private readonly ICustomerModelMapper _customerModelMapper;
     private static int _id;
 
-
+    public CustomerController(EFDataContext dataContext, ICustomerModelMapper modelMapper)
+    {
+        _efDataContext = dataContext;
+        _customerModelMapper = modelMapper;
+    }
+    
     public IActionResult Index()
     {
         _id = _efDataContext.GetCustomerId() + 1;

@@ -9,10 +9,16 @@ namespace WebApplicationL5.Controllers;
 [Route("Order")]
 public class OrderController : Controller
 {
-    private EFDataContext _efDataContext = new EFDataContext();
-    private IOrderModelMapper _orderModelMapper = new OrderModelMapper();
+    private readonly EFDataContext _efDataContext;
+    private readonly IOrderModelMapper _orderModelMapper;
 
     private static int _id;
+
+    public OrderController(EFDataContext dataContext, IOrderModelMapper modelMapper)
+    {
+         _efDataContext = dataContext;
+         _orderModelMapper = modelMapper;
+    }
 
     public IActionResult Index()
     {
