@@ -7,45 +7,41 @@ namespace WebApplicationL5.Data.EF;
 
 public class EFDataContext : DbContext, IDataContext
 {
-    private static EFDataContext _dataContext;
-    private EFDataContext()
+    public EFDataContext(ICustomerModelMapper customerModelMapper, IOrderModelMapper orderModelMapper)
     {
+        _orderModelMapper = orderModelMapper;
+        _customerModelMapper = customerModelMapper;
         //Database.EnsureDeleted();
-
         Database.EnsureCreated();
     }
 
-    public static EFDataContext GetContext()
-    {
-        if (_dataContext == null)
-        {
-            _dataContext = new EFDataContext();
-        }
-        return _dataContext;
-    }
     private DbSet<Customer> _customers { get; set; }
     private DbSet<Order> Orders { get; set; }
 
-    private ICustomerModelMapper _customerModelMapper =  CustomerModelMapper.GetMapper();
-    private IOrderModelMapper _orderModelMapper = OrderModelMapper.GetMapper();
-    private IProductModelMapper _productModelMapper = ProductModelMapper.GetModel();
+    private ICustomerModelMapper _customerModelMapper;
+    private IOrderModelMapper _orderModelMapper;
+    private IProductModelMapper _productModelMapper;
 
     public IList<ProductModel> SelectProducts()
     {
         throw new NotImplementedException();
     }
+
     public int AddProduct(ProductModel productModel)
     {
         throw new NotImplementedException();
     }
+
     public int UpdateProduct(ProductModel productModel)
     {
         throw new NotImplementedException();
     }
+
     public int DeleteProduct(int id)
     {
         throw new NotImplementedException();
     }
+
     public int ProductsRowsCount()
     {
         throw new NotImplementedException();
@@ -57,12 +53,14 @@ public class EFDataContext : DbContext, IDataContext
 
         return result;
     }
+
     public int AddCustomer(Customer customer)
     {
         _customers.Add(customer);
 
         return SaveChanges();
     }
+
     public int UpdateCustomer(Customer customer)
     {
         var foundCustomer = _customers.Find(customer.Id);
@@ -75,6 +73,7 @@ public class EFDataContext : DbContext, IDataContext
 
         return SaveChanges();
     }
+
     public int DeleteCustomer(int id)
     {
         var foundCustomer = _customers.FirstOrDefault(row => row.Id == id);
@@ -83,10 +82,12 @@ public class EFDataContext : DbContext, IDataContext
 
         return SaveChanges();
     }
+
     public int CustomersRowsCount()
     {
         throw new NotImplementedException();
     }
+
     public int GetCustomerId()
     {
         var maxCustomerId = _customers.Max(customer => customer.Id);
@@ -97,12 +98,14 @@ public class EFDataContext : DbContext, IDataContext
     {
         return Orders.Select(order => _orderModelMapper.MapToModel(order)).ToList();
     }
+
     public int AddOrder(Order order)
     {
         Orders.Add(order);
 
         return SaveChanges();
     }
+
     public int UpdateOrder(Order order)
     {
         var foundOrder = Orders.Find(order.Id);
@@ -115,6 +118,7 @@ public class EFDataContext : DbContext, IDataContext
 
         return SaveChanges();
     }
+
     public int DeleteOrder(int id)
     {
         var foundOrder = Orders.FirstOrDefault(order => order.Id == id);
@@ -123,10 +127,12 @@ public class EFDataContext : DbContext, IDataContext
 
         return SaveChanges();
     }
+
     public int OrdersRowsCount()
     {
         throw new NotImplementedException();
     }
+
     public int GetOrderId()
     {
         var maxOrderId = Orders.Max(order => order.Id);
@@ -142,14 +148,14 @@ public class EFDataContext : DbContext, IDataContext
         modelBuilder.Entity<Customer>().Property(p => p.Age).HasColumnName("age");
         modelBuilder.Entity<Customer>().ToTable(p => p.HasCheckConstraint("age", "age > 0"));
         modelBuilder.Entity<Customer>().Property(p => p.Country).HasColumnName("country");
-        
+
         modelBuilder.Entity<Order>().ToTable("Orders");
         modelBuilder.Entity<Order>().Property(p => p.CustomerId).HasColumnName("customer_id");
         modelBuilder.Entity<Order>().Property(p => p.ProductId).HasColumnName("product_id");
         modelBuilder.Entity<Order>().Property(p => p.CreatedAt).HasColumnName("created_at");
         modelBuilder.Entity<Order>().Property(p => p.Count).HasColumnName("count");
         modelBuilder.Entity<Order>().ToTable(p => p.HasCheckConstraint("count", "count >= 0"));
-        
+
         modelBuilder.Entity<Product>().ToTable("Products");
         modelBuilder.Entity<Product>().Property(p => p.Type).HasColumnName("product_type");
         modelBuilder.Entity<Product>().ToTable(p => p.HasCheckConstraint("Price", "Price > 0"));

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using WebApplicationL5.Data.EF;
 using WebApplicationL5.ModelMappers;
 
@@ -8,6 +9,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IOrderModelMapper, OrderModelMapper>();
 builder.Services.AddScoped<ICustomerModelMapper, CustomerModelMapper>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(op => { op.LoginPath = "/Login"; });
+    
 
 builder.Services.AddDbContext<EFDataContext>();
 
@@ -44,6 +49,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

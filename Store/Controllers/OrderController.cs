@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationL5.Data;
 using WebApplicationL5.Data.EF;
@@ -20,6 +21,7 @@ public class OrderController : Controller
          _orderModelMapper = modelMapper;
     }
 
+    [Authorize]
     public IActionResult Index()
     {
         _id = _efDataContext.GetOrderId() + 1;
