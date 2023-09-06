@@ -17,15 +17,19 @@ public class OrderController : Controller
 
     public OrderController(EFDataContext dataContext, IOrderModelMapper modelMapper)
     {
-         _efDataContext = dataContext;
-         _orderModelMapper = modelMapper;
+        _efDataContext = dataContext;
+        _orderModelMapper = modelMapper;
     }
 
-    [Authorize]
     public IActionResult Index()
     {
-        _id = _efDataContext.GetOrderId() + 1;
-        return View(_efDataContext.SelectOrders());
+        if (User.Identity.IsAuthenticated)
+        {
+            _id = _efDataContext.GetOrderId() + 1;
+            return View(_efDataContext.SelectOrders());
+        }
+
+        return RedirectToAction("Login", "JWT");
     }
 
     [Route("id")]
