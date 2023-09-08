@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationL5.Data;
@@ -21,15 +23,11 @@ public class OrderController : Controller
         _orderModelMapper = modelMapper;
     }
 
+    [Authorize(Roles = "admin")]
     public IActionResult Index()
     {
-        if (User.Identity.IsAuthenticated)
-        {
-            _id = _efDataContext.GetOrderId() + 1;
-            return View(_efDataContext.SelectOrders());
-        }
-
-        return RedirectToAction("Login", "JWT");
+        _id = _efDataContext.GetOrderId() + 1;
+        return View(_efDataContext.SelectOrders());
     }
 
     [Route("id")]

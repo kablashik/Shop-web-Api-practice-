@@ -11,33 +11,34 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
     {
-        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.LoginPath = "/login2";
+        options.AccessDeniedPath = "/login2";
     })
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = "MyApp",
-            ValidAudience = "MyClient",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("my_secret_long_key"))
-        };
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                context.Token = context.Request.Cookies["token"];
-                return Task.CompletedTask;
-            }
-        };
-    });
+   //.AddJwtBearer(options =>
+   //{
+   //    options.TokenValidationParameters = new TokenValidationParameters
+   //    {
+   //        ValidateIssuer = true,
+   //        ValidateAudience = true,
+   //        ValidateLifetime = true,
+   //        ValidateIssuerSigningKey = true,
+   //        ValidIssuer = "MyApp",
+   //        ValidAudience = "MyClient",
+   //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("my_secret_long_key"))
+   //    };
+   //    options.Events = new JwtBearerEvents
+   //    {
+   //        OnMessageReceived = context =>
+   //        {
+   //            context.Token = context.Request.Cookies["token"];
+   //            return Task.CompletedTask;
+   //        }
+   //    };
+   //})
+    ;
 
 
 builder.Services.AddScoped<IOrderModelMapper, OrderModelMapper>();

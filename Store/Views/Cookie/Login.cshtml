@@ -1,6 +1,7 @@
 @model WebApplicationL5.Data.Models.User
 
-<form method="post" action="/login">
+<form method="post" action="/login2">
+   <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
     <div class="form-group">
         <label for="Name">Логин:</label>
         <input type="text" name="Name" class="form-control" required>

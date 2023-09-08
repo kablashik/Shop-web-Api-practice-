@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationL5.Data;
 using WebApplicationL5.Data.EF;
@@ -18,7 +19,9 @@ public class CustomerController : Controller
         _efDataContext = dataContext;
         _customerModelMapper = modelMapper;
     }
-    
+
+    [AgeAuthorize(MinimumAge = 18)]
+    [Authorize(Roles = "admin, user")]
     public IActionResult Index()
     {
         _id = _efDataContext.GetCustomerId() + 1;
