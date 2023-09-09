@@ -25,7 +25,6 @@ public class ProductController : Controller
         return Content(_id.ToString());
     }
 
-
     [HttpPost("add")]
     public IActionResult AddProduct([FromBody] ProductModel productModel)
     {

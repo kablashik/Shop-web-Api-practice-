@@ -16,7 +16,6 @@ public class CookieController : Controller
         new User { Name = "max", Password = "111", Role = "user", Age = 30 },
     };
 
-
     [HttpGet]
     [Route("login2")]
     public IActionResult Login()

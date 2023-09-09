@@ -87,4 +87,15 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Product}/{action=Index}/{productId?}");
 
+/*app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Product}/{action=Index}/{productId?}");
+    endpoints.MapControllerRoute(
+        name: "logout",
+        pattern: "logout",
+        defaults: new { controller = "Order", action = "Logout" }); 
+});*/
+
 app.Run();
