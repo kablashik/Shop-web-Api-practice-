@@ -1,9 +1,14 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Prometheus;
+using Serilog.Context;
 using WebApplicationL5.Data;
 using WebApplicationL5.Data.EF;
+using WebApplicationL5.Data.Email;
+using WebApplicationL5.Data.Models;
 using WebApplicationL5.ModelMappers;
 using WebApplicationL5.Models;
 
@@ -14,18 +19,29 @@ public class CustomerController : Controller
 {
     private readonly EFDataContext _efDataContext;
     private readonly ICustomerModelMapper _customerModelMapper;
+    private readonly ILogger<CustomerController> _logger;
+    private readonly IEmailSender _emailSenderService;
+
     private static int _id;
 
-    public CustomerController(EFDataContext dataContext, ICustomerModelMapper modelMapper)
+    public CustomerController(EFDataContext dataContext, ICustomerModelMapper modelMapper,
+        ILogger<CustomerController> logger, IEmailSender emailSenderService)
     {
         _efDataContext = dataContext;
         _customerModelMapper = modelMapper;
+        _logger = logger;
+        _emailSenderService = emailSenderService;
     }
 
     [AgeAuthorize(MinimumAge = 18)]
     [Authorize(Roles = "admin, user")]
-    public IActionResult Index()
+    public IActionResult Index(string param)
     {
+        _logger.LogInformation("New request from CustomerController");
+
+        var counter = Metrics.CreateCounter("my_test_count", "CustomerController Index requests count");
+        counter.Inc();
+
         _id = _efDataContext.GetCustomerId() + 1;
         return View(_efDataContext.SelectCustomers());
     }
@@ -34,6 +50,7 @@ public class CustomerController : Controller
     public IActionResult GetCurrentId()
     {
         return Content(_id.ToString());
+        
     }
 
     [Route("add")]
@@ -43,7 +60,7 @@ public class CustomerController : Controller
         _efDataContext.AddCustomer(dbCustomer);
 
         _id = customer.Id;
-
+        
         return Ok(new { customer.Id });
     }
 
@@ -58,7 +75,7 @@ public class CustomerController : Controller
 
         var dbCustomer = _customerModelMapper.MapFromModel(updatedCustomer);
         _efDataContext.UpdateCustomer(dbCustomer);
-
+        
         return Ok();
     }
 
@@ -66,16 +83,14 @@ public class CustomerController : Controller
     public IActionResult Delete(int id)
     {
         _efDataContext.DeleteCustomer(id);
-
+        
         return RedirectToAction("Index");
     }
 
-    [Route("rows-count")]
-    public IActionResult GetRowCount()
+    [Route("email")]
+    public async void Email()
     {
-        var rows = _efDataContext.CustomersRowsCount();
-
-        return Ok(rows);
+        await _emailSenderService.SendEmailAsync("aspnetsendertest@gmail.com");
     }
     
     [Route("logout")]

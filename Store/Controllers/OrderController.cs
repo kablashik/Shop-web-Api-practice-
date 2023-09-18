@@ -70,12 +70,6 @@ public class OrderController : Controller
     }
 
     [Route("rows-count")]
-    public IActionResult GetRowsCount()
-    {
-        var rows = _efDataContext.OrdersRowsCount();
-
-        return Ok(rows);
-    }
     
     [Route("logout")]
     public async Task<IActionResult> Logout()

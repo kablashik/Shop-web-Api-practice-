@@ -42,11 +42,6 @@ public class EFDataContext : DbContext, IDataContext
         throw new NotImplementedException();
     }
 
-    public int ProductsRowsCount()
-    {
-        throw new NotImplementedException();
-    }
-
     public IList<CustomerModel> SelectCustomers()
     {
         var result = _customers.Select(customer => _customerModelMapper.MapToModel(customer)).ToList();
@@ -81,11 +76,6 @@ public class EFDataContext : DbContext, IDataContext
         if (foundCustomer != null) _customers.Remove(foundCustomer);
 
         return SaveChanges();
-    }
-
-    public int CustomersRowsCount()
-    {
-        throw new NotImplementedException();
     }
 
     public int GetCustomerId()
@@ -128,11 +118,6 @@ public class EFDataContext : DbContext, IDataContext
         return SaveChanges();
     }
 
-    public int OrdersRowsCount()
-    {
-        throw new NotImplementedException();
-    }
-
     public int GetOrderId()
     {
         var maxOrderId = Orders.Max(order => order.Id);
@@ -163,7 +148,7 @@ public class EFDataContext : DbContext, IDataContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseMySQL("Datasource=localhost;Database=usersdb;User=root;Password=3079718;");
-        //optionsBuilder.UseMySQL("Datasource=localhost;Database=usersdb3;User=root;Password=3079718;");
+        //optionsBuilder.UseMySQL("Datasource=localhost;Database=usersdb;User=root;Password=3079718;");
+        optionsBuilder.UseMySQL("Datasource=localhost;Database=usersdb3;User=root;Password=3079718;");
     }
 }

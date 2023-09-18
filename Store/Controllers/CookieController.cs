@@ -10,10 +10,10 @@ public class CookieController : Controller
 {
     private static List<User> _users = new List<User>
     {
-        new User { Name = "admin", Password = "admin", Role = "admin", Age = 39 },
-        new User { Name = "user", Password = "123", Role = "user", Age = 20 },
-        new User { Name = "oleg", Password = "qwerty", Role = "user", Age = 15 },
-        new User { Name = "max", Password = "111", Role = "user", Age = 30 },
+        new User {UserId = 1, Name = "admin", Password = "admin", Role = "admin", Age = 39, Email = "Kos2akb@gmail.com"},
+        new User {UserId = 2, Name = "user", Password = "123", Role = "user", Age = 20, Email = "Kos2akb@gmail.com" },
+        new User {UserId = 3, Name = "oleg", Password = "qwerty", Role = "user", Age = 15, Email = "Kos2akb@gmail.com" },
+        new User {UserId = 4, Name = "max", Password = "111", Role = "user", Age = 30, Email = "Kos2akb@gmail.com" },
     };
 
     [HttpGet]
@@ -34,8 +34,10 @@ public class CookieController : Controller
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, model.Name),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role),
+                new Claim("Age", user.Age.ToString()),
+                new Claim("UserId", user.UserId.ToString() )
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -62,10 +64,4 @@ public class CookieController : Controller
         return null; // Пользователь не найден или пароль неверный.
     }
 
-    public static User GetCurrentUser(string name)
-    {
-        var user = _users.FirstOrDefault(user => user.Name == name);
-
-        return user;
-    }
 }

@@ -19,20 +19,14 @@ public class AgeAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
             context.Result = new UnauthorizedResult();
             return;
         }
+        
+        var userAge = int.Parse(httpContext.User.Claims.FirstOrDefault(user => user.Type == "Age")?.Value); 
+        
+        //var user = CookieController.GetCurrentUser(userName);
 
-        var userName = httpContext.User.Identity.Name;
-        var user = CookieController.GetCurrentUser(userName);
 
-        if (user == null)
-        {
-            context.Result = new UnauthorizedResult(); // Пользователь не найден
-            return;
-        }
-
-        if (user.Age < MinimumAge)
-        {
-            context.Result = new ForbidResult(); // Возвращаем результат с отказом в доступе
-            return;
-        }
+        if (userAge >= MinimumAge) return;
+        context.Result = new ForbidResult(); // Возвращаем результат с отказом в доступе
+        return;
     }
 }

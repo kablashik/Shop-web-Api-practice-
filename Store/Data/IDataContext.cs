@@ -10,18 +10,15 @@ public interface IDataContext
     public int AddProduct(ProductModel productModel);
     public int UpdateProduct(ProductModel productModel);
     public int DeleteProduct(int id);
-    public int ProductsRowsCount();
 
     public IList<CustomerModel> SelectCustomers();
     public int AddCustomer(Customer customer);
     public int UpdateCustomer(Customer customer);
     public int DeleteCustomer(int id);
-    public int CustomersRowsCount();
 
     public IList<OrderModel> SelectOrders();
     public int AddOrder(Order orderModel);
     public int UpdateOrder(Order orderModel);
     public int DeleteOrder(int id);
-    public int OrdersRowsCount();
 
 }
