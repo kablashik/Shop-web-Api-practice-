@@ -77,6 +77,7 @@ namespace WebApplicationL5.Migrations
                     b.ToTable("Orders", null, t =>
                         {
                             t.HasCheckConstraint("count", "count >= 0");
+                            t.HasCheckConstraint("created_at", "created_at < Now()");
                         });
                 });
 

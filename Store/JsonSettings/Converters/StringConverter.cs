@@ -9,7 +9,7 @@ public class StringConverter : JsonConverter<string>
     {
         var value = reader.GetString();
 
-        if (value == "хуй")
+        if (value == "fuck")
         {
             return "цензура";
         }
